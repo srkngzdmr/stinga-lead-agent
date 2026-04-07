@@ -50,6 +50,42 @@ Hedef Sektörler:
 `;
 
 const SECTOR_QUERIES = {
+  "Belediye & Arıtma Çamuru": {
+    icon: "🏛️",
+    queries: [
+      "büyükşehir belediye arıtma çamuru bertaraf tesisleri Türkiye",
+      "atıksu arıtma çamuru termik kurutma çözümleri belediye",
+      "belediye atık yönetimi çevre ihalesi Türkiye 2024"
+    ],
+    reason: "Arıtma çamuru kurutma & termik bertaraf, aktif karbon üretimi, sıfır depolama hedefi",
+    currentSystem: "Çamur düzenli depolama alanları dolmakta; depolama yasağı kapıda. Yüksek nakliye & bertaraf maliyeti. Metan gazı sorunu.",
+    priority: "⭐ ÖNCELIKLI",
+    priorityColor: "#dc2626"
+  },
+  "Kurutma & Bertaraf Teknolojileri": {
+    icon: "🔥",
+    queries: [
+      "Türkiye endüstriyel kurutma tesisi firmaları",
+      "atık bertaraf lisanslı şirketler Türkiye",
+      "termik kurutma sistemi tedarikçi Türkiye"
+    ],
+    reason: "Stinga 4D reaktör teknolojisi: oksijensiz ortamda kurutma, sıfır emisyon, karbonlaştırma",
+    currentSystem: "Konvansiyonel döner tamburlu kurutucular, yüksek enerji ve emisyon",
+    priority: "⭐ ÖNCELIKLI",
+    priorityColor: "#dc2626"
+  },
+  "Emisyon & Karbon Ayak İzi": {
+    icon: "🌿",
+    queries: [
+      "Türkiye karbon yönetimi danışmanlık firmaları",
+      "AB SKDM emisyon uyum hizmetleri Türkiye",
+      "sera gazı azaltım projesi endüstri Türkiye"
+    ],
+    reason: "Stinga teknolojisi ile AB SKDM (Sınırda Karbon Düzenleme Mekanizması) uyumu, karbon kredisi kazanımı",
+    currentSystem: "Yüksek karbon ayak izi, artan AB sınır vergisi riski, yetersiz raporlama altyapısı",
+    priority: "⭐ ÖNCELIKLI",
+    priorityColor: "#dc2626"
+  },
   "Termik Santral & Enerji": {
     icon: "⚡",
     queries: ["Türkiye termik santral şirketleri iletişim", "kömür yakıtlı enerji santralleri Türkiye firmaları"],
@@ -74,12 +110,6 @@ const SECTOR_QUERIES = {
     reason: "Buhar üretim kazanları, enerji maliyeti düşürme",
     currentSystem: "Doğalgaz/kömür kazanları, yüksek yakıt maliyeti"
   },
-  "Belediye & Atık Yönetimi": {
-    icon: "🏛️",
-    queries: ["belediye arıtma çamuru bertaraf tesisleri Türkiye", "atık yönetimi şirketleri Türkiye"],
-    reason: "Arıtma çamuru bertarafı, atık yakma, aktif karbon üretimi",
-    currentSystem: "Depolama/düzenli depolama, yüksek maliyet, çevre sorunları"
-  },
   "Su Arıtma & Çevre": {
     icon: "💧",
     queries: ["su arıtma tesisleri Türkiye firmaları", "aktif karbon tedarikçi Türkiye"],
@@ -92,12 +122,6 @@ const SECTOR_QUERIES = {
     reason: "Kurutma teknolojisi, enerji verimliliği",
     currentSystem: "Geleneksel kurutma fırınları, yüksek enerji tüketimi"
   },
-  "Kağıt & Selüloz": {
-    icon: "📄",
-    queries: ["Türkiye kağıt fabrikaları listesi", "selüloz üretim tesisleri Türkiye"],
-    reason: "Buhar üretimi, kurutma süreçleri, emisyon azaltma",
-    currentSystem: "Yüksek buhar tüketimi, doğalgaz bağımlılığı"
-  },
   "Tavuk Çiftlikleri & Kümes": {
     icon: "🐔",
     queries: ["Türkiye tavuk çiftlikleri büyük firmalar", "kanatlı hayvan üretim şirketleri Türkiye"],
@@ -109,15 +133,84 @@ const SECTOR_QUERIES = {
     queries: ["Türkiye kömür madeni firmaları", "maden şirketleri kömür kurutma ihtiyacı"],
     reason: "Kömür kurutma ve kalite artırma, linyit karbonlaştırma teknolojisi",
     currentSystem: "Açık hava kurutma, verimsiz kömür işleme, yüksek nem oranları"
+  },
+  "Kağıt & Selüloz": {
+    icon: "📄",
+    queries: ["Türkiye kağıt fabrikaları listesi", "selüloz üretim tesisleri Türkiye"],
+    reason: "Buhar üretimi, kurutma süreçleri, emisyon azaltma",
+    currentSystem: "Yüksek buhar tüketimi, doğalgaz bağımlılığı"
   }
 };
 
 const KNOWN_COMPANIES = {
+  "Belediye & Arıtma Çamuru": [
+    // İstanbul
+    { name: "İSKİ (İstanbul Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.iski.istanbul", linkedin: "linkedin.com/company/iski", note: "İstanbul'un tüm atıksu yönetimi — günlük 3M+ m³ atıksu arıtma kapasitesi. 14 büyük arıtma tesisi mevcuttur. Çamur bertarafı için Silivri ve Kömürcüoda tesisleri kullanılmaktadır.", need: "Çamur termik kurutma & bertaraf, aktif karbon üretimi", phone: "+90 212 321 60 00", email: "bilgi@iski.gov.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "İSTAÇ A.Ş.", sector: "Atık Yönetimi", website: "www.istac.istanbul", linkedin: "linkedin.com/company/istac", note: "İBB atık yönetimi şirketi — İstanbul'un katı atık ve biyolojik atık yönetimi. Yıllık 3M ton atık işleme kapasitesi. Kompostlama, biyogaz ve bertaraf tesisleri mevcuttur.", need: "Arıtma çamuru termik bertaraf, emisyonsuz yakma", phone: "+90 212 368 12 00", email: "info@istac.istanbul", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    // Ankara
+    { name: "ASKİ (Ankara Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.aski.gov.tr", linkedin: "linkedin.com/company/aski-ankara", note: "Ankara'nın atıksu arıtma idaresi. Günlük 600.000 m³ atıksu arıtma kapasitesi. Çamur bertarafı için Sincan ve Tatlar tesisleri kullanılmaktadır.", need: "Çamur kurutma sistemi, bertaraf lisansı", phone: "+90 312 314 12 43", email: "info@aski.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "EGO Genel Müdürlüğü", sector: "Belediye Hizmetleri", website: "www.ego.gov.tr", linkedin: "-", note: "Ankara Büyükşehir Belediyesi'ne bağlı hizmet kuruluşu. Ulaşım ve altyapı hizmetleri kapsamında çevre yatırımları.", need: "Arıtma çamuru bertaraf çözümleri", phone: "+90 312 384 00 00", email: "iletisim@ego.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    // İzmir
+    { name: "İZSU (İzmir Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.izsu.gov.tr", linkedin: "linkedin.com/company/izsu", note: "İzmir'in atıksu yöneticisi. Çiğli AAT Türkiye'nin en büyük biyolojik arıtma tesislerinden biri. Yıllık binlerce ton çamur üretimi bertaraf beklemektedir.", need: "Termik çamur kurutma, karbon ayak izi azaltma", phone: "+90 232 293 13 00", email: "info@izsu.gov.tr", city: "İzmir", lat: 38.4237, lng: 27.1428 },
+    // Bursa
+    { name: "BUSKİ (Bursa Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.buski.gov.tr", linkedin: "linkedin.com/company/buski", note: "Bursa Büyükşehir Belediyesi su ve kanalizasyon idaresi. Nilüfer AAT ve Kestel AAT başlıca arıtma tesisleridir. Çamur bertarafı öncelikli gündem maddesidir.", need: "Çamur termik bertaraf, enerji geri kazanım", phone: "+90 224 270 20 00", email: "iletisim@buski.gov.tr", city: "Bursa", lat: 40.1828, lng: 29.0665 },
+    // Konya
+    { name: "KOSKİ (Konya Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.koski.gov.tr", linkedin: "linkedin.com/company/koski", note: "Konya Büyükşehir Belediyesi su idaresi. İç Anadolu'nun en büyük arıtma tesisini işletmektedir. Atıksu çamurunu tarımda kullanmakta, yeni bertaraf çözümleri arayışındadır.", need: "Çamur kurutma & tarım dışı bertaraf", phone: "+90 332 234 00 34", email: "koski@koski.gov.tr", city: "Konya", lat: 37.8716, lng: 32.4943 },
+    // Adana
+    { name: "ASAT (Antalya Su ve Atıksu İdaresi)", sector: "Su/Atık Su", website: "www.asat.gov.tr", linkedin: "linkedin.com/company/asat", note: "Antalya Büyükşehir Belediyesi'ne bağlı. Turizm bölgesi olması nedeniyle çevre hassasiyeti yüksek. Çamur bertarafı için yenilikçi çözümler arıyor.", need: "Çamur termik bertaraf, sıfır koku teknolojisi", phone: "+90 242 249 20 00", email: "asat@asat.gov.tr", city: "Antalya", lat: 36.8841, lng: 30.7056 },
+    { name: "AdASKİ (Adana Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.adanaski.gov.tr", linkedin: "-", note: "Adana Büyükşehir Belediyesi su ve kanalizasyon idaresi. Günlük 400.000 m³ atıksu arıtma kapasitesi. Çamur sorununu çözmek için yatırım planı hazırlamaktadır.", need: "Arıtma çamuru kurutma sistemi", phone: "+90 322 458 00 00", email: "info@adanaski.gov.tr", city: "Adana", lat: 37.0, lng: 35.3213 },
+    // Kocaeli
+    { name: "İSU (Kocaeli Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.isu.gov.tr", linkedin: "linkedin.com/company/kocaeli-isu", note: "Kocaeli Büyükşehir Belediyesi su idaresi. Sanayi kenti olması nedeniyle atıksu yükü yüksek. İzmit Körfezi koruma kapsamında çevre yatırımları zorunludur.", need: "Endüstriyel arıtma çamuru bertaraf & kurutma", phone: "+90 262 317 10 00", email: "info@isu.gov.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    // Gaziantep
+    { name: "GASKİ (Gaziantep Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.gaski.gov.tr", linkedin: "-", note: "Gaziantep Büyükşehir Belediyesi su idaresi. Endüstriyel atıksu yükü yüksek sanayi kenti. Çamur bertaraf kapasitesi yetersiz kalmaktadır.", need: "Arıtma çamuru bertaraf, endüstriyel çamur kurutma", phone: "+90 342 321 00 00", email: "gaski@gaski.gov.tr", city: "Gaziantep", lat: 37.0662, lng: 37.3833 },
+    // Mersin
+    { name: "MESKİ (Mersin Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.meski.gov.tr", linkedin: "-", note: "Mersin Büyükşehir Belediyesi su idaresi. Liman kenti ve turizm merkezi; çevre hassasiyeti yüksek. Çamur bertaraf maliyetleri bütçe yükü oluşturmaktadır.", need: "Çamur termik bertaraf, düzenli depolama alternatifleri", phone: "+90 324 238 00 00", email: "bilgi@meski.gov.tr", city: "Mersin", lat: 36.8121, lng: 34.6415 },
+    // Hatay
+    { name: "HATSu (Hatay Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.hatsu.gov.tr", linkedin: "-", note: "Hatay Büyükşehir Belediyesi su idaresi. Deprem sonrası yeniden yapılanma kapsamında altyapı yatırımları hız kazanmıştır. Yeni teknolojilere açık.", need: "Modern çamur bertaraf sistemi, yeniden yapılanma", phone: "+90 326 221 00 00", email: "info@hatsu.gov.tr", city: "Hatay", lat: 36.5946, lng: 36.1726 },
+    // Sakarya
+    { name: "SASKİ (Sakarya Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.saski.gov.tr", linkedin: "-", note: "Sakarya Büyükşehir Belediyesi su idaresi. Organize sanayi bölgeleri nedeniyle endüstriyel atıksu yoğun. Çamur bertaraf alternatifleri arıyor.", need: "Endüstriyel çamur kurutma, bertaraf teknolojisi", phone: "+90 264 275 90 00", email: "saski@saski.gov.tr", city: "Sakarya", lat: 40.7569, lng: 30.3781 },
+    // Karadeniz
+    { name: "TRASKİ (Trabzon Su ve Kanalizasyon İdaresi)", sector: "Su/Atık Su", website: "www.traski.com.tr", linkedin: "-", note: "Trabzon Büyükşehir Belediyesi su idaresi. Karadeniz'e sıfır deşarj hedefi kapsamında arıtma yatırımları hız kazanmaktadır.", need: "Çamur kurutma & bertaraf, çevre uyumu", phone: "+90 462 327 00 00", email: "traski@traski.com.tr", city: "Trabzon", lat: 41.0015, lng: 39.7178 },
+    // Çevre Şirketleri
+    { name: "Çevko Vakfı", sector: "Çevre", website: "www.cevko.org.tr", linkedin: "linkedin.com/company/cevko", note: "Çevre Koruma ve Ambalaj Atıkları Değerlendirme Vakfı. 500+ üye firma ile Türkiye'nin en büyük geri dönüşüm ağı. Yenilikçi bertaraf teknolojilerine yatırım desteklemektedir.", need: "Emisyonsuz bertaraf teknolojisi tanıtım & ortaklık", phone: "+90 212 283 82 96", email: "info@cevko.org.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "ÇEVSAN Çevre ve Sağlık Hizmetleri", sector: "Çevre Teknolojisi", website: "www.cevsan.com.tr", linkedin: "linkedin.com/company/cevsan", note: "Atık yönetimi ve çevre danışmanlık hizmetleri. Belediyeler ve sanayi kuruluşlarına arıtma çamuru bertaraf çözümleri sunmaktadır.", need: "Termik çamur bertaraf teknolojisi entegrasyonu", phone: "+90 216 489 00 00", email: "info@cevsan.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Stfa Çevre", sector: "Çevre Mühendisliği", website: "www.stfa.com.tr", linkedin: "linkedin.com/company/stfa", note: "Stfa Grubu çevre şirketi — AAT (Atıksu Arıtma Tesisi) inşaat ve işletme. Türkiye'nin önde gelen çevre mühendisliği firmalarından biri.", need: "Çamur bertaraf teknoloji ortaklığı", phone: "+90 212 393 00 00", email: "cevre@stfa.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Ekotek Çevre Teknolojileri", sector: "Çevre Teknolojisi", website: "www.ekotek.com.tr", linkedin: "linkedin.com/company/ekotek", note: "Türkiye'de atıksu arıtma ve çamur yönetim çözümleri sunan öncü firma. Belediyelere özel çözümler geliştirmektedir.", need: "Arıtma çamuru termik kurutma entegrasyonu", phone: "+90 312 385 50 00", email: "info@ekotek.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Yüksel Proje A.Ş.", sector: "Mühendislik", website: "www.yukselproje.com.tr", linkedin: "linkedin.com/company/yuksel-proje", note: "Altyapı mühendisliği ve çevre projeleri. Pek çok belediyenin AAT projesini yönetmiştir. Teknoloji tedarikçisi seçiminde etkili.", need: "Çamur bertaraf teknoloji danışmanlık", phone: "+90 312 427 31 26", email: "info@yukselproje.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "KİPTAŞ (İstanbul Konut İmar Plan A.Ş.)", sector: "Kentsel Dönüşüm", website: "www.kiptas.com.tr", linkedin: "linkedin.com/company/kiptaş", note: "İBB'ye bağlı konut ve altyapı şirketi. AAT projelerinde yüklenici konumundadır. İstanbul arıtma çamuru sorununda kilit aktör.", need: "Arıtma çamuru yönetim sistemi", phone: "+90 212 462 50 00", email: "info@kiptas.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Akdeniz Belediyeler Birliği", sector: "Belediye Birliği", website: "www.akdenizbb.org.tr", linkedin: "-", note: "Akdeniz bölgesi belediyelerinin ortak hizmet birliği. Üye belediyelere çevre teknolojileri konusunda toplu alım ve proje koordinasyonu sağlamaktadır.", need: "Toplu çamur bertaraf çözümü, ortak yatırım", phone: "+90 242 248 00 00", email: "info@akdenizbb.org.tr", city: "Antalya", lat: 36.8841, lng: 30.7056 },
+    { name: "Marmara Belediyeler Birliği", sector: "Belediye Birliği", website: "www.marmara.gov.tr", linkedin: "linkedin.com/company/marmara-belediyeler-birligi", note: "İstanbul merkezli bölgesel belediye birliği. 100+ üye belediyeye çevre, altyapı ve atık yönetiminde destek sağlar. İhale koordinasyonu yapar.", need: "Bölgesel arıtma çamuru bertaraf stratejisi", phone: "+90 212 440 60 60", email: "mbb@mbb.gov.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "ÇED Danışmanlık (Çevre ve Şehircilik Bak.)", sector: "Kamu", website: "www.csb.gov.tr", linkedin: "-", note: "T.C. Çevre, Şehircilik ve İklim Değişikliği Bakanlığı — arıtma çamuru bertaraf lisanslarını ve çevre mevzuatını düzenlemektedir. Teknoloji onayı için kritik kurum.", need: "Emisyonsuz bertaraf teknoloji homologasyonu", phone: "+90 312 410 10 00", email: "info@csb.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Şanlıurfa BŞB Su İdaresi (ŞUSKİ)", sector: "Su/Atık Su", website: "www.suski.gov.tr", linkedin: "-", note: "Güneydoğu Anadolu'nun en büyük su idarelerinden biri. GAP kapsamında genişleyen arıtma ağı ile çamur bertaraf kapasitesi yetersiz kalmaktadır.", need: "Çamur kurutma ve bertaraf çözümü", phone: "+90 414 215 00 00", email: "info@suski.gov.tr", city: "Şanlıurfa", lat: 37.1591, lng: 38.7969 },
+  ],
+  "Kurutma & Bertaraf Teknolojileri": [
+    { name: "Ekotek Çevre Teknolojileri", sector: "Çevre/Kurutma", website: "www.ekotek.com.tr", linkedin: "linkedin.com/company/ekotek", note: "Türkiye'de endüstriyel kurutma ve çamur yönetim çözümleri. Entegre termik kurutma sistemleri konusunda pazar lideri. Belediye ve sanayi projeleri.", need: "Stinga reaktör entegrasyonu ile sıfır emisyon kurutma", phone: "+90 312 385 50 00", email: "info@ekotek.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Hitit Solar (Sanayi Kurutma)", sector: "Endüstriyel Kurutma", website: "www.hititkurutma.com", linkedin: "linkedin.com/company/hitit-solar", note: "Türkiye'nin güneş enerjili ve hibrid kurutma sistemleri üreticisi. Tarımsal ürün ve çamur kurutma alanında faaliyet göstermektedir.", need: "Emisyonsuz ısı kaynağı entegrasyonu", phone: "+90 312 395 00 00", email: "info@hititkurutma.com", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Netas (Nef Teknik Atık Servisleri)", sector: "Atık Bertaraf", website: "www.netas.com.tr", linkedin: "linkedin.com/company/netas-atik", note: "Tehlikeli ve tehlikesiz atık bertaraf lisanslı firma. Türkiye'nin çeşitli illerinde bertaraf tesisleri. Çamur ve endüstriyel atık yönetimi.", need: "Termik bertaraf kapasitesi genişletme", phone: "+90 216 576 00 00", email: "info@netas.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "ERPET Çevre (Atık Yakma & Geri Kazanım)", sector: "Atık Yakma", website: "www.erpet.com.tr", linkedin: "linkedin.com/company/erpet", note: "Lisanslı atık yakma ve enerji geri kazanım tesisi. Endüstriyel atık ve arıtma çamuru bertarafı. Emisyon limitleri nedeniyle yeni teknoloji arayışı.", need: "Emisyon sınırlarını aşmadan kapasite artırma", phone: "+90 262 742 00 00", email: "info@erpet.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "Setaş Çevre (Arıtma Çamuru)", sector: "Çevre Hizmetleri", website: "www.setas.com.tr", linkedin: "linkedin.com/company/setaş-çevre", note: "Arıtma çamuru nakliye ve bertaraf hizmetleri. Sanayi bölgelerindeki fabrikalar ve belediyelere hizmet vermektedir.", need: "Termik kurutma ile nakliye maliyeti azaltma", phone: "+90 262 658 00 00", email: "info@setas.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "Protel Çevre Mühendislik", sector: "Çevre Teknolojisi", website: "www.protelcevre.com", linkedin: "linkedin.com/company/protel-cevre", note: "Çevre mühendisliği ve danışmanlık. Sanayi tesisleri için atıksu arıtma çamuru bertaraf projeleri geliştirmektedir.", need: "Arıtma çamuru bertaraf çözümü teknoloji ortaklığı", phone: "+90 312 472 10 00", email: "info@protelcevre.com", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Entegre Çevre (İzmir Atık)", sector: "Atık Yönetimi", website: "www.entegrizevre.com.tr", linkedin: "linkedin.com/company/entegre-cevre", note: "İzmir bölgesi odaklı katı ve sıvı atık yönetimi firması. Organize sanayi bölgelerine atık bertaraf hizmetleri vermektedir.", need: "Kurutma teknolojisi ile bertaraf kapasitesi artırma", phone: "+90 232 472 00 00", email: "info@entegrizevre.com.tr", city: "İzmir", lat: 38.4237, lng: 27.1428 },
+    { name: "Doğa Çevre Danışmanlık", sector: "Çevre Danışmanlık", website: "www.dogacevre.com.tr", linkedin: "linkedin.com/company/doga-cevre", note: "ÇED raporu ve atık yönetim planı hazırlayan lider danışmanlık firması. Sanayi ve belediye projelerinde teknoloji seçimine etki etmektedir.", need: "Emisyonsuz teknoloji danışmanlık entegrasyonu", phone: "+90 312 473 10 00", email: "info@dogacevre.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Biyoenerji Tarım A.Ş.", sector: "Biyoenerji/Kurutma", website: "www.biyoenerji.com.tr", linkedin: "linkedin.com/company/biyoenerji-tarim", note: "Biyokütle ve organik atık enerji dönüşümü. Çamur ve tarımsal artık kurutma+yakma sistemleri kurmaktadır.", need: "Sıfır emisyon yanma reaktörü entegrasyonu", phone: "+90 332 323 00 00", email: "info@biyoenerji.com.tr", city: "Konya", lat: 37.8716, lng: 32.4943 },
+    { name: "Suez Türkiye", sector: "Su/Çevre", website: "www.suez.com", linkedin: "linkedin.com/company/suez", note: "Global çevre ve su yönetimi devi — Türkiye operasyonu. Atıksu arıtma, çamur yönetimi ve geri kazanım teknolojileri sunar.", need: "Yerel emisyonsuz bertaraf çözümü ortaklığı", phone: "+90 216 564 00 00", email: "info@suez.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+  ],
+  "Emisyon & Karbon Ayak İzi": [
+    { name: "EY Türkiye (ESG & Sürdürülebilirlik)", sector: "Danışmanlık", website: "www.ey.com/tr_tr", linkedin: "linkedin.com/company/ernst-young", note: "Ernst & Young Türkiye — sera gazı envanter, doğrulama ve karbon raporlama hizmetleri. AB SKDM uyum süreçlerinde danışman olarak görev almaktadır.", need: "Stinga teknolojisiyle müşterilere karbon azaltım çözümü", phone: "+90 212 408 51 00", email: "ey.turkiye@tr.ey.com", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Deloitte Türkiye (Sürdürülebilirlik)", sector: "Danışmanlık", website: "www2.deloitte.com/tr", linkedin: "linkedin.com/company/deloitte", note: "Deloitte Türkiye ESG danışmanlık ekibi — karbon muhasebesi, iklim riski değerlendirmesi ve AB SKDM uyum çalışmaları.", need: "Emisyon azaltım teknoloji entegrasyonu", phone: "+90 212 366 60 00", email: "info@deloitte.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Carbon Turkey (Karbon Danışmanlık)", sector: "Karbon Yönetimi", website: "www.carbonturkey.com", linkedin: "linkedin.com/company/carbon-turkey", note: "Türkiye'nin öncü karbon ayak izi hesaplama ve azaltım danışmanlık firması. ISO 14064, GHG Protocol ve SKDM uyum hizmetleri sunmaktadır.", need: "Stinga teknolojisini karbon azaltım portföyüne ekleme", phone: "+90 212 290 30 00", email: "info@carbonturkey.com", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Yeşil Nokta Çevre Danışmanlık", sector: "Çevre/Karbon", website: "www.yesilnokta.com.tr", linkedin: "linkedin.com/company/yesil-nokta", note: "KOBİ ve büyük sanayi kuruluşları için sera gazı envanteri, iklim stratejisi ve karbon nötr sertifikasyon hizmetleri.", need: "Emisyonsuz teknoloji çözümü müşterilere sunma", phone: "+90 312 473 00 00", email: "info@yesilnokta.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "TÜSİAD (Sürdürülebilir Kalkınma)", sector: "İş Dünyası Birliği", website: "www.tusiad.org", linkedin: "linkedin.com/company/tusiad", note: "Türk Sanayicileri ve İş İnsanları Derneği. Üye firmalar için sürdürülebilirlik raporlaması ve yeşil dönüşüm platformu yürütmektedir.", need: "Üye firmalara emisyon teknoloji çözümleri", phone: "+90 212 249 19 29", email: "tusiad@tusiad.org", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "TÜBİTAK MAM Çevre Enstitüsü", sector: "Ar-Ge/Kamu", website: "www.mam.gov.tr", linkedin: "linkedin.com/company/mam-tubitak", note: "Marmara Araştırma Merkezi Çevre Enstitüsü — endüstriyel emisyon ölçüm, kirlilik araştırması ve çevre teknolojisi geliştirme.", need: "Emisyonsuz yanma teknolojisi doğrulama & raporlama", phone: "+90 262 677 20 00", email: "mam@tubitak.gov.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "EPDK (Enerji Piyasası Düzenleme Kurumu)", sector: "Kamu Düzenleyici", website: "www.epdk.gov.tr", linkedin: "-", note: "Türkiye enerji sektörü düzenleyicisi. Emisyon yönetmeliklerinin enerji üretimine yansıması konusunda kilit kurum. Lisans başvurularında emisyon belgesi talep eder.", need: "Stinga teknoloji homologasyonu & emisyon belgesi", phone: "+90 312 201 40 00", email: "epdk@epdk.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "Korkmaz Enerji (Yeşil Enerji Yatırımları)", sector: "Yenilenebilir Enerji", website: "www.korkmazenerji.com.tr", linkedin: "linkedin.com/company/korkmaz-enerji", note: "Karma enerji portföyüne sahip Türk şirketi. Karbon nötr hedefleri kapsamında düşük emisyonlu teknolojilere yatırım planlamaktadır.", need: "Karbon nötr yanma teknolojisi adaptasyonu", phone: "+90 212 347 00 00", email: "info@korkmazenerji.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Agora Enerji (Yeşil Geçiş)", sector: "Enerji Danışmanlık", website: "www.agoraenerji.com.tr", linkedin: "linkedin.com/company/agora-enerji", note: "Türkiye enerji geçişi danışmanlık ve politika araştırma kuruluşu. Endüstri için dekarbonizasyon yol haritaları hazırlamaktadır.", need: "Stinga teknolojisi emisyon azaltım vaka çalışması", phone: "+90 212 274 00 00", email: "bilgi@agoraenerji.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "WWF Türkiye (Sanayi İklim Programı)", sector: "STK/Çevre", website: "www.wwf.org.tr", linkedin: "linkedin.com/company/wwf-turkey", note: "World Wildlife Fund Türkiye — kurumsal karbon nötr programı yürütmektedir. Sanayi kuruluşlarını düşük emisyonlu teknolojilere yönlendirmektedir.", need: "Emisyonsuz teknoloji proje ortaklığı & tanıtım", phone: "+90 212 528 20 30", email: "info@wwf.org.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+  ],
   "Termik Santral & Enerji": [
     { name: "EÜAŞ (Elektrik Üretim A.Ş.)", sector: "Enerji Üretimi", website: "www.euas.gov.tr", linkedin: "linkedin.com/company/euas", note: "Devlet termik santralleri — Türkiye'nin en büyük kamu enerji üreticisi", need: "Linyit santrallerinde emisyon düşürme", phone: "+90 312 212 69 00", email: "info@euas.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
     { name: "Eren Enerji", sector: "Enerji", website: "www.erenenerji.com.tr", linkedin: "linkedin.com/company/eren-enerji", note: "Kömürlü termik santral operatörü — Zonguldak Eren Termik Santrali", need: "Yanma verimi artırma, emisyon azaltma", phone: "+90 212 381 50 00", email: "info@erenenerji.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "IC İçtaş Enerji", sector: "Enerji", website: "www.icholding.com.tr", linkedin: "linkedin.com/company/ic-ictas", note: "Büyük ölçekli termik santral yatırımcısı — HES ve termik portföyü", need: "Emisyon azaltma teknolojisi", phone: "+90 212 352 00 00", email: "info@icholding.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "Çelikler Holding", sector: "Enerji/Madencilik", website: "www.celikler.com.tr", linkedin: "linkedin.com/company/celikler-holding", note: "Kömür madeni + santral entegrasyonu — dikey entegre yapı", need: "Kömür kalitesini artırma, kurutma", phone: "+90 312 440 18 28", email: "info@celikler.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
+    { name: "IC İçtaş Enerji", sector: "Enerji", website: "www.icholding.com.tr", linkedin: "linkedin.com/company/ic-ictas", note: "Büyük ölçekli termik santral yatırımcısı", need: "Emisyon azaltma teknolojisi", phone: "+90 212 352 00 00", email: "info@icholding.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
     { name: "Bereket Enerji", sector: "Enerji", website: "www.bereketenerji.com.tr", linkedin: "linkedin.com/company/bereket-enerji", note: "Termik santral işletmecisi — Afşin-Elbistan bölgesi", need: "Çevresel uyumluluk, emisyon limitleri", phone: "+90 212 215 33 33", email: "info@bereketenerji.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
     { name: "TKİ (Türkiye Kömür İşletmeleri)", sector: "Madencilik", website: "www.tki.gov.tr", linkedin: "linkedin.com/company/tki", note: "Devlet kömür işletmesi — Türkiye linyit rezervlerinin %50'sini işletir", need: "Kömür kurutma ve kalite artırma", phone: "+90 312 384 24 00", email: "info@tki.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
   ],
@@ -127,6 +220,8 @@ const KNOWN_COMPANIES = {
     { name: "Akçansa", sector: "Çimento", website: "www.akcansa.com.tr", linkedin: "linkedin.com/company/akcansa", note: "Sabancı/HeidelbergCement ortaklığı — 2 entegre fabrika", need: "Sürdürülebilir üretim, net sıfır hedefi", phone: "+90 216 571 30 00", email: "info@akcansa.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
     { name: "Çimsa", sector: "Çimento", website: "www.cimsa.com.tr", linkedin: "linkedin.com/company/cimsa", note: "Sabancı grubu — beyaz çimento ve özel çimentolar", need: "Emisyon azaltma hedefleri", phone: "+90 324 234 66 50", email: "info@cimsa.com.tr", city: "Mersin", lat: 36.8121, lng: 34.6415 },
     { name: "Nuh Çimento", sector: "Çimento", website: "www.nuhcimento.com.tr", linkedin: "linkedin.com/company/nuh-cimento", note: "Kocaeli bölgesi — yıllık 5M ton üretim kapasitesi", need: "Enerji verimliliği", phone: "+90 262 349 36 00", email: "info@nuhcimento.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "Bolu Çimento", sector: "Çimento", website: "www.bolucement.com", linkedin: "linkedin.com/company/bolu-cimento", note: "Bolu ve çevre illerde pazar lideri çimento üreticisi", need: "Alternatif yakıt çözümü", phone: "+90 374 270 40 00", email: "info@bolucement.com", city: "Bolu", lat: 40.7355, lng: 31.6112 },
+    { name: "Çelikler Çimento", sector: "Çimento", website: "www.celikler.com.tr", linkedin: "linkedin.com/company/celikler-holding", note: "Çelikler Holding çimento kolu — entegre üretim", need: "Kömür kurutma, emisyon azaltma", phone: "+90 312 440 18 28", email: "info@celikler.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
   ],
   "Demir-Çelik": [
     { name: "Erdemir (Ereğli Demir Çelik)", sector: "Demir-Çelik", website: "www.erdemir.com.tr", linkedin: "linkedin.com/company/erdemir", note: "Türkiye'nin en büyük yassı çelik üreticisi — OYAK grubu", need: "Karbon ayak izi azaltma", phone: "+90 372 323 55 55", email: "info@erdemir.com.tr", city: "Zonguldak", lat: 41.4534, lng: 31.7987 },
@@ -139,14 +234,8 @@ const KNOWN_COMPANIES = {
     { name: "Zorlu Holding (Korteks)", sector: "Tekstil", website: "www.zorlu.com.tr", linkedin: "linkedin.com/company/zorlu-holding", note: "Büyük tekstil grubu — polyester iplik üretiminde dünya lideri", need: "Buhar kazanı verimliliği", phone: "+90 212 456 24 00", email: "info@zorlu.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
     { name: "Kipaş Holding", sector: "Tekstil", website: "www.kipas.com.tr", linkedin: "linkedin.com/company/kipas-holding", note: "Kahramanmaraş merkezli entegre tekstil grubu", need: "Enerji maliyeti optimize", phone: "+90 344 237 00 00", email: "info@kipas.com.tr", city: "Kahramanmaraş", lat: 37.5847, lng: 36.9371 },
     { name: "Sanko Holding", sector: "Tekstil", website: "www.sanko.com.tr", linkedin: "linkedin.com/company/sanko-holding", note: "Gaziantep tekstil — iplik, dokuma, konfeksiyon", need: "Buhar üretim kazanı", phone: "+90 342 211 15 00", email: "info@sanko.com.tr", city: "Gaziantep", lat: 37.0662, lng: 37.3833 },
-    { name: "İTHİB", sector: "Sektör Birliği", website: "www.ithib.org.tr", linkedin: "linkedin.com/company/ithib", note: "İstanbul Tekstil ve Hammaddeleri İhracatçıları Birliği", need: "Üyelere teknoloji tanıtım", phone: "+90 212 454 02 00", email: "info@ithib.org.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-  ],
-  "Belediye & Atık Yönetimi": [
-    { name: "İSTAÇ A.Ş.", sector: "Atık Yönetimi", website: "www.istac.istanbul", linkedin: "linkedin.com/company/istac", note: "İBB atık yönetimi şirketi — İstanbul'un katı atık yönetimi", need: "Arıtma çamuru bertarafı", phone: "+90 212 368 12 00", email: "info@istac.istanbul", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "İSKİ", sector: "Su/Atık Su", website: "www.iski.istanbul", linkedin: "linkedin.com/company/iski", note: "İstanbul Su ve Kanalizasyon İdaresi — günlük 5M+ m³ su", need: "Çamur kurutma, aktif karbon", phone: "+90 212 321 60 00", email: "bilgi@iski.gov.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "ASKİ (Ankara)", sector: "Su/Atık Su", website: "www.aski.gov.tr", linkedin: "linkedin.com/company/aski-ankara", note: "Ankara Su ve Kanalizasyon İdaresi", need: "Arıtma çamuru bertarafı", phone: "+90 312 314 12 43", email: "info@aski.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
-    { name: "Çevko Vakfı", sector: "Çevre", website: "www.cevko.org.tr", linkedin: "linkedin.com/company/cevko", note: "Çevre Koruma ve Ambalaj Atıkları Değerlendirme Vakfı", need: "Emisyonsuz teknoloji tanıtım", phone: "+90 212 283 82 96", email: "info@cevko.org.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "ITC Invest Trading", sector: "Çevre Teknolojileri", website: "www.itcinvest.com", linkedin: "linkedin.com/company/itc-invest", note: "Çevre yatırımları ve teknoloji", need: "Bertaraf teknolojisi", phone: "+90 212 355 00 00", email: "info@itcinvest.com", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
+    { name: "Yunsa (Yünsa Yünlü Sanayi)", sector: "Tekstil", website: "www.yunsa.com", linkedin: "linkedin.com/company/yunsa", note: "Çerkezköy merkezli yünlü kumaş üretimi — büyük buhar tüketimi", need: "Düşük emisyonlu buhar kazanı", phone: "+90 282 726 11 00", email: "info@yunsa.com", city: "Tekirdağ", lat: 41.2867, lng: 27.9997 },
+    { name: "Korteks İplik", sector: "Tekstil", website: "www.korteks.com.tr", linkedin: "linkedin.com/company/korteks", note: "Polyester iplik üretimi — enerji yoğun süreçler", need: "Buhar ve ısı enerjisi optimizasyonu", phone: "+90 224 243 34 00", email: "info@korteks.com.tr", city: "Bursa", lat: 40.1828, lng: 29.0665 },
   ],
   "Su Arıtma & Çevre": [
     { name: "Kurita Turkey", sector: "Su Arıtma", website: "www.kurita.co.jp", linkedin: "linkedin.com/company/kurita-water", note: "Japon su arıtma devi — endüstriyel su çözümleri", need: "Aktif karbon tedarik", phone: "+90 216 573 83 00", email: "info@kurita.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
@@ -158,12 +247,6 @@ const KNOWN_COMPANIES = {
     { name: "Eti Maden", sector: "Madencilik/Gıda", website: "www.etimaden.gov.tr", linkedin: "linkedin.com/company/eti-maden", note: "Maden işletmesi — bor madenleri ve endüstriyel mineraller", need: "Kurutma teknolojisi", phone: "+90 312 294 20 00", email: "info@etimaden.gov.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
     { name: "Tariş Üzüm", sector: "Tarım/Gıda", website: "www.tarisuzum.com.tr", linkedin: "linkedin.com/company/taris", note: "Üzüm kurutma ve işleme kooperatifi — İzmir bölgesi", need: "Verimli kurutma sistemi", phone: "+90 232 463 09 09", email: "info@tarisuzum.com.tr", city: "İzmir", lat: 38.4237, lng: 27.1428 },
     { name: "Oltan Gıda", sector: "Gıda İşleme", website: "www.oltan.com.tr", linkedin: "linkedin.com/company/oltan-gida", note: "Türkiye'nin en büyük fındık işleme tesisi", need: "Kurutma fırınları modernizasyonu", phone: "+90 454 215 11 00", email: "info@oltan.com.tr", city: "Giresun", lat: 40.9128, lng: 38.3895 },
-  ],
-  "Kağıt & Selüloz": [
-    { name: "Hayat Holding (Hayat Kimya)", sector: "Kağıt/Hijyen", website: "www.hayat.com.tr", linkedin: "linkedin.com/company/hayat-holding", note: "Kağıt ve hijyen ürünleri — Papia, Familia, Bingo markaları", need: "Buhar kazanı verimliliği", phone: "+90 262 315 73 00", email: "info@hayat.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
-    { name: "Mondi Tire Kutsan", sector: "Kağıt/Ambalaj", website: "www.mondigroup.com", linkedin: "linkedin.com/company/mondi-group", note: "Avusturya merkezli ambalaj kağıdı üreticisi — Tire fabrikası", need: "Enerji maliyeti azaltma", phone: "+90 232 512 10 10", email: "info@mondi.com.tr", city: "İzmir", lat: 38.4237, lng: 27.1428 },
-    { name: "Olmuksan IP", sector: "Ambalaj", website: "www.olmuksan.com.tr", linkedin: "linkedin.com/company/olmuksan-ip", note: "Oluklu mukavva üretimi — International Paper grubu", need: "Buhar üretim sistemi", phone: "+90 262 349 45 00", email: "info@olmuksan.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
-    { name: "Modern Karton", sector: "Kağıt/Karton", website: "www.modernkarton.com.tr", linkedin: "linkedin.com/company/modern-karton", note: "Kaplı karton üretimi — Sakarya fabrikası", need: "Buhar ve enerji verimliliği", phone: "+90 264 276 50 00", email: "info@modernkarton.com.tr", city: "Sakarya", lat: 40.7569, lng: 30.3781 },
   ],
   "Tavuk Çiftlikleri & Kümes": [
     { name: "Banvit (BRF Türkiye)", sector: "Kanatlı Hayvan", website: "www.banvit.com.tr", linkedin: "linkedin.com/company/banvit", note: "Türkiye'nin en büyük entegre tavuk üreticilerinden — Bandırma merkezli, yıllık 200M+ tavuk kapasitesi", need: "Kümes ısıtma maliyeti düşürme, emisyonsuz kazan", phone: "+90 266 738 19 00", email: "info@banvit.com.tr", city: "Balıkesir", lat: 40.3420, lng: 27.9711 },
@@ -179,16 +262,16 @@ const KNOWN_COMPANIES = {
     { name: "TTK (Türkiye Taşkömürü Kurumu)", sector: "Taşkömürü", website: "www.taskomuru.gov.tr", linkedin: "-", note: "Zonguldak havzası taşkömürü üretimi — Türkiye'nin tek taşkömürü üreticisi", need: "Kömür kurutma ve işleme teknolojisi", phone: "+90 372 252 23 00", email: "info@taskomuru.gov.tr", city: "Zonguldak", lat: 41.4534, lng: 31.7987 },
     { name: "Çelikler Madencilik", sector: "Kömür Madenciliği", website: "www.celikler.com.tr", linkedin: "linkedin.com/company/celikler-holding", note: "Kömür madenciliği ve enerji grubu — Afşin-Elbistan linyit sahası", need: "Linyit kurutma, karbonlaştırma", phone: "+90 312 440 18 28", email: "info@celikler.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
     { name: "Polyak Eynez", sector: "Kömür Madenciliği", website: "www.polyak.com.tr", linkedin: "linkedin.com/company/polyak-eynez", note: "Manisa-Soma linyit madeni — yeraltı kömür işletmesi", need: "Kömür kurutma sistemi", phone: "+90 236 612 80 00", email: "info@polyak.com.tr", city: "Manisa", lat: 38.6191, lng: 27.4289 },
-    { name: "Demir Export", sector: "Madencilik", website: "www.demirexport.com", linkedin: "linkedin.com/company/demir-export", note: "Krom, kömür ve enerji yatırımları — Afşin-Elbistan", need: "Kömür kalite iyileştirme, kurutma", phone: "+90 312 459 76 00", email: "info@demirexport.com", city: "Ankara", lat: 39.9334, lng: 32.8597 },
-    { name: "Hattat Holding (Hattat Enerji)", sector: "Madencilik/Enerji", website: "www.hattat.com.tr", linkedin: "linkedin.com/company/hattat-holding", note: "Amasra kömür madeni ve termik santral projesi", need: "Kömür kurutma, kalite artırma", phone: "+90 212 355 12 00", email: "info@hattat.com.tr", city: "İstanbul", lat: 41.0082, lng: 28.9784 },
-    { name: "Fernas İnşaat (Kolin Grubu)", sector: "Madencilik", website: "www.fernas.com.tr", linkedin: "linkedin.com/company/fernas", note: "Maden ve inşaat grubu — kömür madeni operasyonları", need: "Verimli kömür işleme", phone: "+90 312 497 30 00", email: "info@fernas.com.tr", city: "Ankara", lat: 39.9334, lng: 32.8597 },
     { name: "Park Termik", sector: "Kömür/Enerji", website: "www.parktermik.com.tr", linkedin: "linkedin.com/company/park-termik", note: "Bolu-Göynük linyit madeni ve termik santral", need: "Düşük kalorili kömür kurutma", phone: "+90 374 471 22 00", email: "info@parktermik.com.tr", city: "Bolu", lat: 40.7355, lng: 31.6112 },
+  ],
+  "Kağıt & Selüloz": [
+    { name: "Hayat Holding (Hayat Kimya)", sector: "Kağıt/Hijyen", website: "www.hayat.com.tr", linkedin: "linkedin.com/company/hayat-holding", note: "Kağıt ve hijyen ürünleri — Papia, Familia, Bingo markaları", need: "Buhar kazanı verimliliği", phone: "+90 262 315 73 00", email: "info@hayat.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "Mondi Tire Kutsan", sector: "Kağıt/Ambalaj", website: "www.mondigroup.com", linkedin: "linkedin.com/company/mondi-group", note: "Avusturya merkezli ambalaj kağıdı üreticisi — Tire fabrikası", need: "Enerji maliyeti azaltma", phone: "+90 232 512 10 10", email: "info@mondi.com.tr", city: "İzmir", lat: 38.4237, lng: 27.1428 },
+    { name: "Olmuksan IP", sector: "Ambalaj", website: "www.olmuksan.com.tr", linkedin: "linkedin.com/company/olmuksan-ip", note: "Oluklu mukavva üretimi — International Paper grubu", need: "Buhar üretim sistemi", phone: "+90 262 349 45 00", email: "info@olmuksan.com.tr", city: "Kocaeli", lat: 40.7654, lng: 29.9408 },
+    { name: "Modern Karton", sector: "Kağıt/Karton", website: "www.modernkarton.com.tr", linkedin: "linkedin.com/company/modern-karton", note: "Kaplı karton üretimi — Sakarya fabrikası", need: "Buhar ve enerji verimliliği", phone: "+90 264 276 50 00", email: "info@modernkarton.com.tr", city: "Sakarya", lat: 40.7569, lng: 30.3781 },
   ]
 };
 
-const API_URL = "/api/ai-search";
-
-// Lead status options
 const LEAD_STATUSES = {
   new: { label: "Yeni", color: "#64748b", bg: "rgba(100,116,139,0.12)" },
   contacted: { label: "İletişim Kuruldu", color: "#3b82f6", bg: "rgba(59,130,246,0.12)" },
@@ -196,6 +279,56 @@ const LEAD_STATUSES = {
   proposal: { label: "Teklif Verildi", color: "#8b5cf6", bg: "rgba(139,92,246,0.12)" },
   won: { label: "Kazanıldı", color: "#10b981", bg: "rgba(16,185,129,0.12)" },
   lost: { label: "Kaybedildi", color: "#ef4444", bg: "rgba(239,68,68,0.12)" },
+};
+
+const AI_ANALYSIS_CONFIG = {
+  "Belediye & Arıtma Çamuru": {
+    painPoints: [
+      { icon: "⚠️", title: "Depolama Kriezi", desc: "Düzenli depolama alanları 2025-2030 arası kapanıyor. Acil bertaraf çözümü zorunlu.", severity: "Kritik" },
+      { icon: "💰", title: "Yüksek Maliyet", desc: "Çamur nakliyesi + depolama: yıllık 500 TL/ton+. Termik kurutma ile %60 tasarruf mümkün.", severity: "Yüksek" },
+      { icon: "🌡️", title: "Koku & Çevre", desc: "Yaş çamur depolama koku şikayetlerine neden oluyor. Termik çözüm sıfır koku garantisi sunar.", severity: "Orta" },
+      { icon: "⚖️", title: "Yasal Baskı", desc: "AB uyum direktifleri ve Çevre Kanunu revizyonları çamur bertarafında standartları yükseltiyor.", severity: "Kritik" },
+    ],
+    stingaAdvantages: [
+      { icon: "🔥", title: "Termik Kurutma", desc: "Stinga 4D reaktör ile çamur nem oranı %80'den %10'a düşer." },
+      { icon: "⚡", title: "Enerji Geri Kazanım", desc: "Kuru çamur yakıt değeri kazanır; kendi enerjisini üretebilir." },
+      { icon: "🌿", title: "Sıfır Emisyon", desc: "CO 12 ppm — yasal sınırın 20 katı altında. ÇED onayında sorun çıkmaz." },
+      { icon: "📋", title: "Aktif Karbon Üretimi", desc: "Kuru çamurdan aktif karbon üretilerek satılabilir." },
+    ],
+    marketSize: "Türkiye'de yıllık ~3 milyon ton yaş arıtma çamuru üretilmektedir. Bertaraf maliyeti 1.5 milyar TL/yıl.",
+    urgencyScore: 95,
+    salesTip: "Belediye ihale takvimi Ocak-Mart ve Temmuz-Eylül dönemlerinde yoğunlaşır. Büyükşehir su idareleri ile doğrudan görüşme talep edin."
+  },
+  "Kurutma & Bertaraf Teknolojileri": {
+    painPoints: [
+      { icon: "💸", title: "Yüksek Enerji Tüketimi", desc: "Geleneksel döner tamburlu kurutucular ton başına 800-1200 kWh tüketir.", severity: "Yüksek" },
+      { icon: "🏭", title: "Emisyon Aşımı", desc: "Konvansiyonel kurutma tesisleri güncel emisyon sınırlarını aşmaktadır.", severity: "Kritik" },
+      { icon: "🔧", title: "Bakım Maliyeti", desc: "Mekanik aksam yoğun bakım gerektiriyor, duruş süreleri yüksek.", severity: "Orta" },
+    ],
+    stingaAdvantages: [
+      { icon: "⚡", title: "%97 Verim", desc: "Piyasadaki en verimli yanma sistemi ile ton başına enerji maliyeti minimize." },
+      { icon: "🌿", title: "Emisyonsuz", desc: "NOx 3 ppm — standart tesislerin 100 katı altında." },
+      { icon: "🔩", title: "Az Bakım", desc: "Hareketli parça sayısı minimum — düşük bakım maliyeti." },
+    ],
+    marketSize: "Endüstriyel kurutma ekipmanları Türkiye pazarı: yıllık ~500M USD",
+    urgencyScore: 78,
+    salesTip: "Teknoloji ortaklığı ve alt yüklenici modeli ile kurutma şirketlerine yaklaşın."
+  },
+  "Emisyon & Karbon Ayak İzi": {
+    painPoints: [
+      { icon: "🌍", title: "AB SKDM Baskısı", desc: "2026'dan itibaren AB'ye ihracat yapan sanayi firmaları karbon sınır vergisi ödeyecek.", severity: "Kritik" },
+      { icon: "📊", title: "Raporlama Zorunluluğu", desc: "Borsada işlem gören şirketler zorunlu sürdürülebilirlik raporu hazırlamalı.", severity: "Yüksek" },
+      { icon: "🏦", title: "Finans Baskısı", desc: "Yeşil kredi ve tahvil için karbon azaltım planı şart koşuluyor.", severity: "Yüksek" },
+    ],
+    stingaAdvantages: [
+      { icon: "📉", title: "Karbon Azaltım", desc: "CO₂ salınımı tipik kazana göre %95 azalır — doğrulanabilir azaltım." },
+      { icon: "📋", title: "TÜBİTAK Raporu", desc: "Bağımsız laboratuvar onaylı emisyon verileri raporlara doğrudan girilebilir." },
+      { icon: "💰", title: "Karbon Kredisi", desc: "Gönüllü karbon piyasasında sertifika elde etme potansiyeli." },
+    ],
+    marketSize: "Karbon danışmanlık ve emisyon azaltım teknolojileri Türkiye pazarı: 2B USD'a ulaşması bekleniyor.",
+    urgencyScore: 90,
+    salesTip: "Danışmanlık firmaları ile B2B ortaklık kurun — onlar müşteri bulur, siz teknoloji sağlarsınız."
+  }
 };
 
 export default function StingaLeadAgent() {
@@ -217,13 +350,18 @@ export default function StingaLeadAgent() {
   const [autoScanSector, setAutoScanSector] = useState(0);
   const [scanProgress, setScanProgress] = useState(0);
   const [lastScanTime, setLastScanTime] = useState(null);
+  const [bannerDot, setBannerDot] = useState(0);
   const chatEndRef = useRef(null);
-  const scanIntervalRef = useRef(null);
   const [clock, setClock] = useState(new Date());
 
   useEffect(() => {
     const timer = setInterval(() => setClock(new Date()), 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const dot = setInterval(() => setBannerDot(d => (d + 1) % 4), 500);
+    return () => clearInterval(dot);
   }, []);
 
   const totalLeads = Object.values(KNOWN_COMPANIES).reduce((sum, arr) => sum + arr.length, 0);
@@ -234,7 +372,6 @@ export default function StingaLeadAgent() {
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [chatMessages]);
 
-  // Auto-scan logic
   useEffect(() => {
     if (autoScanActive) {
       const runNext = async () => {
@@ -262,19 +399,21 @@ export default function StingaLeadAgent() {
 
   const callClaude = async (prompt, systemPrompt) => {
     try {
-      const response = await fetch(API_URL, {
+      const response = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          prompt,
-          systemPrompt: systemPrompt || "Sen bir B2B satış araştırma uzmanısın. Türkçe yanıt ver."
+          model: "claude-sonnet-4-20250514",
+          max_tokens: 1000,
+          system: systemPrompt || "Sen bir B2B satış araştırma uzmanısın. Türkçe yanıt ver. Madde işaretleri veya başlık kullanma, düz metin yaz.",
+          messages: [{ role: "user", content: prompt }]
         })
       });
       const data = await response.json();
-      if (data.success) {
-        return data.result || "Sonuç alınamadı.";
+      if (data.content && data.content[0]) {
+        return data.content[0].text || "Sonuç alınamadı.";
       }
-      return "Hata: " + (data.error || "Bilinmeyen bir hata oluştu.");
+      return "Hata: Yanıt alınamadı.";
     } catch (err) {
       console.error("API Error:", err);
       return "API hatası: " + err.message;
@@ -298,10 +437,10 @@ export default function StingaLeadAgent() {
     addLog(`📊 ${companies.length} bilinen firma listelendi`);
 
     try {
-      const prompt = `${STINGA_CONTEXT}\n\nSektör: ${sectorName}\nStinga'nın bu sektöre sunabileceği çözüm: ${sector.reason}\nBu sektörün mevcut sistemi: ${sector.currentSystem}\n\nLütfen bu sektördeki potansiyel müşterileri araştır. Her firma için:\n1. Firma adı ve ne iş yaptığı\n2. Stinga'nın hangi ürününe neden ihtiyaç duyduğu\n3. Mevcut kullandıkları sistem/teknoloji\n4. İletişim bilgileri (varsa website, LinkedIn)\n\nAyrıca sektör analizi yap:\n- Sektörün mevcut enerji/emisyon sorunları\n- Stinga teknolojisinin bu sektöre sağlayacağı avantajlar\n- Satış stratejisi önerileri\n\nTürkçe ve detaylı yanıt ver.`;
+      const prompt = `${STINGA_CONTEXT}\n\nSektör: ${sectorName}\nStinga'nın bu sektöre sunabileceği çözüm: ${sector.reason}\nBu sektörün mevcut sistemi: ${sector.currentSystem}\n\nBu sektör için kısa ve net bir satış strateji özeti yaz. Şunları içersin:\n1. Bu sektördeki en kritik 2-3 ağrı noktası\n2. Stinga'nın en güçlü 2-3 avantajı\n3. İlk temasa geçmek için önerilen yaklaşım\n\nMakale formatında, madde işareti ve başlık olmadan, düz paragraf olarak yaz. 200 kelimeyi geçme.`;
 
       addLog(`🤖 AI analiz yapıyor: ${sectorName}...`);
-      const result = await callClaude(prompt, `Sen Stinga Enerji A.Ş. için B2B müşteri araştırması yapan bir satış istihbarat uzmanısın. Web'de araştırma yap ve detaylı bilgi ver. Türkçe yanıt ver.`);
+      const result = await callClaude(prompt, `Sen Stinga Enerji A.Ş. için B2B müşteri araştırması yapan bir satış istihbarat uzmanısın. Kısa, net ve satış odaklı Türkçe yanıt ver. Madde işareti veya başlık kullanma, sade paragraf yaz.`);
 
       setSearchResults(prev => ({
         ...prev,
@@ -337,7 +476,7 @@ export default function StingaLeadAgent() {
 
       const result = await callClaude(
         `${STINGA_CONTEXT}\n\nMevcut lead veritabanı:${allCompanies}\n\nKullanıcı sorusu: ${userMsg}`,
-        `Sen Stinga Enerji A.Ş.'nin AI satış asistanısın. Potansiyel müşteriler hakkında bilgi ver, satış stratejileri öner, sektör analizleri yap. Her zaman Türkçe yanıt ver. Web araştırması yapabilirsin.`
+        `Sen Stinga Enerji A.Ş.'nin AI satış asistanısın. Potansiyel müşteriler hakkında bilgi ver, satış stratejileri öner, sektör analizleri yap. Her zaman Türkçe yanıt ver. Sade, anlaşılır cümleler kur.`
       );
       setChatMessages(prev => [...prev, { role: "assistant", content: result }]);
     } catch (err) {
@@ -355,7 +494,6 @@ export default function StingaLeadAgent() {
     setLeadNotes(prev => ({ ...prev, [companyName]: note }));
   };
 
-  // Filter logic
   const getFilteredCompanies = () => {
     let all = Object.entries(KNOWN_COMPANIES).flatMap(([sector, companies]) =>
       companies.map(c => ({ ...c, sectorLabel: sector }))
@@ -385,6 +523,8 @@ export default function StingaLeadAgent() {
     won: Object.values(leadStatuses).filter(s => s === "won").length,
   };
 
+  const dotStr = ".".repeat(bannerDot) + " ".repeat(3 - bannerDot);
+
   return (
     <div style={{
       fontFamily: "'DM Sans', 'Segoe UI', system-ui, sans-serif",
@@ -405,6 +545,11 @@ export default function StingaLeadAgent() {
         @keyframes slideIn { from { opacity: 0; transform: translateX(-12px); } to { opacity: 1; transform: translateX(0); } }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         @keyframes scanPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.3); } 50% { box-shadow: 0 0 0 8px rgba(16,185,129,0); } }
+        @keyframes bannerGlow { 0%, 100% { box-shadow: 0 0 0 0 rgba(16,185,129,0.4); } 50% { box-shadow: 0 0 20px 4px rgba(16,185,129,0.15); } }
+        @keyframes radarSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        @keyframes blinkDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+        @keyframes slideRight { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes dataFlow { 0% { opacity: 0; transform: translateY(4px); } 100% { opacity: 1; transform: translateY(0); } }
         .fade-up { animation: fadeUp 0.4s ease-out both; }
         .pulse-anim { animation: pulse 1.5s ease-in-out infinite; }
         .slide-in { animation: slideIn 0.3s ease-out both; }
@@ -424,13 +569,124 @@ export default function StingaLeadAgent() {
         .scan-active { animation: scanPulse 2s ease-in-out infinite; }
         .progress-bar { height: 4px; background: #e2e8f0; border-radius: 2px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 2px; transition: width 0.5s ease; }
+        .banner-active { animation: bannerGlow 2.5s ease-in-out infinite; }
+        .radar { animation: radarSpin 3s linear infinite; }
+        .blink { animation: blinkDot 1s ease-in-out infinite; }
+        .ai-card { animation: dataFlow 0.4s ease-out both; }
+        .urgency-bar { transition: width 1s ease; }
+        .priority-badge { animation: pulse 2s ease-in-out infinite; }
       `}</style>
+
+      {/* === ANIMATED AGENT STATUS BANNER === */}
+      <div className="banner-active" style={{
+        background: "linear-gradient(135deg, #0f172a 0%, #1e3a2f 50%, #0f172a 100%)",
+        borderBottom: "1px solid rgba(16,185,129,0.3)",
+        padding: "7px 24px",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: 12,
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        {/* Background grid effect */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "linear-gradient(rgba(16,185,129,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(16,185,129,0.03) 1px, transparent 1px)",
+          backgroundSize: "20px 20px",
+          pointerEvents: "none"
+        }} />
+
+        {/* Left: Radar + Status */}
+        <div style={{ display: "flex", alignItems: "center", gap: 12, position: "relative", zIndex: 1 }}>
+          {/* Radar Icon */}
+          <div style={{ position: "relative", width: 28, height: 28, flexShrink: 0 }}>
+            <svg viewBox="0 0 28 28" width="28" height="28">
+              <circle cx="14" cy="14" r="12" stroke="rgba(16,185,129,0.15)" strokeWidth="1.5" fill="none" />
+              <circle cx="14" cy="14" r="7" stroke="rgba(16,185,129,0.25)" strokeWidth="1" fill="none" />
+              <circle cx="14" cy="14" r="2.5" fill="#10b981" />
+              <g className="radar">
+                <path d="M14 14 L14 2" stroke="rgba(16,185,129,0.6)" strokeWidth="1.5" strokeLinecap="round" />
+                <path d="M14 14 L22 8" stroke="rgba(16,185,129,0.2)" strokeWidth="1" strokeLinecap="round" />
+              </g>
+            </svg>
+          </div>
+
+          {/* Live dot */}
+          <div className="blink" style={{
+            width: 7, height: 7, borderRadius: "50%",
+            background: "#10b981",
+            boxShadow: "0 0 6px 2px rgba(16,185,129,0.5)"
+          }} />
+
+          {/* Text */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{
+              fontSize: 12, fontWeight: 700, color: "#10b981",
+              letterSpacing: "0.12em", textTransform: "uppercase",
+              fontFamily: "'JetBrains Mono', monospace"
+            }}>
+              STINGA AJAN AKTİF
+            </span>
+            <span style={{
+              fontSize: 11, color: "rgba(16,185,129,0.5)",
+              fontFamily: "'JetBrains Mono', monospace",
+              minWidth: 24
+            }}>{dotStr}</span>
+            <span style={{
+              background: "rgba(16,185,129,0.12)",
+              border: "1px solid rgba(16,185,129,0.25)",
+              borderRadius: 4,
+              padding: "2px 8px",
+              fontSize: 10,
+              color: "#10b981",
+              fontWeight: 600,
+              letterSpacing: "0.06em"
+            }}>v3.0</span>
+          </div>
+        </div>
+
+        {/* Center: Metrics */}
+        <div style={{ display: "flex", alignItems: "center", gap: 20, position: "relative", zIndex: 1 }}>
+          {[
+            { label: "HEDEF", value: `${totalLeads} Firma`, color: "#34d399" },
+            { label: "SEKTÖR", value: `${sectorKeys.length} Alan`, color: "#60a5fa" },
+            { label: "ANALİZ", value: `${completedSectors}/${sectorKeys.length}`, color: "#a78bfa" },
+          ].map((m, i) => (
+            <div key={i} style={{ textAlign: "center" }}>
+              <div style={{ fontSize: 9, color: "rgba(255,255,255,0.35)", fontWeight: 600, letterSpacing: "0.1em", fontFamily: "'JetBrains Mono', monospace" }}>{m.label}</div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: m.color, fontFamily: "'JetBrains Mono', monospace" }}>{m.value}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Right: Clock + Signal */}
+        <div style={{ display: "flex", alignItems: "center", gap: 10, position: "relative", zIndex: 1 }}>
+          {/* Signal bars */}
+          <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 14 }}>
+            {[4, 7, 10, 14].map((h, i) => (
+              <div key={i} className={i < 3 ? "blink" : ""} style={{
+                width: 3, height: h,
+                background: i < 3 ? "#10b981" : "rgba(16,185,129,0.2)",
+                borderRadius: 1.5,
+                animationDelay: `${i * 0.15}s`
+              }} />
+            ))}
+          </div>
+          <span style={{
+            fontSize: 11, color: "rgba(255,255,255,0.5)",
+            fontFamily: "'JetBrains Mono', monospace"
+          }}>
+            {clock.toLocaleTimeString('tr-TR')}
+          </span>
+        </div>
+      </div>
 
       {/* Header */}
       <header style={{
         background: "#fff",
         borderBottom: "1px solid #e2e8f0",
-        padding: "12px 24px",
+        padding: "10px 24px",
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -440,7 +696,7 @@ export default function StingaLeadAgent() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
-            width: 60, height: 60, borderRadius: "50%",
+            width: 52, height: 52, borderRadius: "50%",
             border: "2.5px solid #fff",
             boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
             overflow: "hidden",
@@ -449,13 +705,13 @@ export default function StingaLeadAgent() {
             background: "#fff"
           }}>
             <img src={STINGA_LOGO} alt="Stinga" style={{
-              position: "absolute", inset: -30,
-              width: 120, height: 120,
+              position: "absolute", inset: -26,
+              width: 104, height: 104,
               objectFit: "contain"
             }} />
           </div>
           <div>
-            <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
+            <h1 style={{ fontSize: 17, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
               Stinga Lead Agent
             </h1>
             <p style={{ fontSize: 11, color: "#64748b", fontWeight: 500 }}>
@@ -463,44 +719,30 @@ export default function StingaLeadAgent() {
             </p>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+
+        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
           <div style={{
             background: "#f8fafc", border: "1px solid #e2e8f0",
-            padding: "6px 14px", borderRadius: 10, fontSize: 13, color: "#0f172a", fontWeight: 600,
-            fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em"
+            padding: "5px 12px", borderRadius: 8, fontSize: 12, color: "#0f172a", fontWeight: 600,
+            fontFamily: "'JetBrains Mono', monospace"
           }}>
-            {clock.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
-            <span style={{ marginLeft: 8, color: "#10b981" }}>
-              {clock.toLocaleTimeString('tr-TR')}
-            </span>
+            {clock.toLocaleDateString('tr-TR', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' })}
           </div>
           {autoScanActive && (
             <div className="scan-active" style={{
               background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)",
-              padding: "6px 14px", borderRadius: 20, fontSize: 12, color: "#059669", fontWeight: 600,
+              padding: "5px 12px", borderRadius: 20, fontSize: 12, color: "#059669", fontWeight: 600,
               display: "flex", alignItems: "center", gap: 6
             }}>
-              <span style={{ display: "inline-block", width: 8, height: 8, borderRadius: "50%", background: "#10b981" }} />
-              Taranıyor... %{scanProgress}
+              <span style={{ display: "inline-block", width: 7, height: 7, borderRadius: "50%", background: "#10b981" }} />
+              Taranıyor %{scanProgress}
             </div>
           )}
-          <span style={{
-            background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)",
-            padding: "6px 12px", borderRadius: 20, fontSize: 12, color: "#059669", fontWeight: 600
-          }}>
+          <span style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.2)", padding: "5px 10px", borderRadius: 20, fontSize: 11, color: "#059669", fontWeight: 600 }}>
             {totalLeads} Lead
           </span>
-          <span style={{
-            background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)",
-            padding: "6px 12px", borderRadius: 20, fontSize: 12, color: "#2563eb", fontWeight: 600
-          }}>
+          <span style={{ background: "rgba(59,130,246,0.08)", border: "1px solid rgba(59,130,246,0.2)", padding: "5px 10px", borderRadius: 20, fontSize: 11, color: "#2563eb", fontWeight: 600 }}>
             {sectorKeys.length} Sektör
-          </span>
-          <span style={{
-            background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.2)",
-            padding: "6px 12px", borderRadius: 20, fontSize: 12, color: "#7c3aed", fontWeight: 600
-          }}>
-            {completedSectors}/{sectorKeys.length} Analiz
           </span>
         </div>
       </header>
@@ -538,7 +780,7 @@ export default function StingaLeadAgent() {
         {/* DASHBOARD */}
         {activeTab === "dashboard" && (
           <div className="fade-up">
-            {/* Hero + Auto Scan */}
+            {/* Hero */}
             <div style={{
               background: "linear-gradient(135deg, #ecfdf5, #f0f9ff)",
               border: "1px solid #d1fae5",
@@ -551,8 +793,7 @@ export default function StingaLeadAgent() {
                   🎯 Stinga Enerji — Hedef Sektör Analizi
                 </h2>
                 <p style={{ fontSize: 13, color: "#475569", lineHeight: 1.6, maxWidth: 600 }}>
-                  Emisyonsuz yanma, kömür kurutma, kümes ısıtma, aktif karbon ve bertaraf teknolojileriniz için
-                  en uygun potansiyel müşterileri AI destekli araştırma ile bulun.
+                  Emisyonsuz yanma, kömür kurutma, arıtma çamuru bertarafı, aktif karbon ve karbon ayak izi azaltma teknolojileriniz için en uygun potansiyel müşterileri AI destekli araştırma ile bulun.
                 </p>
                 {lastScanTime && (
                   <p style={{ fontSize: 11, color: "#94a3b8", marginTop: 8 }}>
@@ -581,7 +822,7 @@ export default function StingaLeadAgent() {
             </div>
 
             {/* Stats Row */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(160px, 1fr))", gap: 12, marginBottom: 20 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))", gap: 12, marginBottom: 20 }}>
               {[
                 { label: "Toplam Lead", value: stats.total, color: "#0f172a", bg: "#fff" },
                 { label: "İletişim Kuruldu", value: stats.contacted, color: "#2563eb", bg: "rgba(59,130,246,0.06)" },
@@ -593,7 +834,7 @@ export default function StingaLeadAgent() {
                   background: s.bg, border: "1px solid #e2e8f0",
                   borderRadius: 12, padding: "16px 18px", textAlign: "center"
                 }}>
-                  <div style={{ fontSize: 28, fontWeight: 700, color: s.color }}>{s.value}</div>
+                  <div style={{ fontSize: 26, fontWeight: 700, color: s.color }}>{s.value}</div>
                   <div style={{ fontSize: 11, color: "#64748b", fontWeight: 600, marginTop: 2 }}>{s.label}</div>
                 </div>
               ))}
@@ -609,23 +850,35 @@ export default function StingaLeadAgent() {
                 const s = SECTOR_QUERIES[sector];
                 const companyCount = KNOWN_COMPANIES[sector]?.length || 0;
                 const status = searchResults[sector]?.status;
+                const isPriority = !!s.priority;
                 return (
                   <div key={sector} className="sector-card fade-up" style={{
                     background: "#fff",
-                    borderColor: status === 'complete' ? '#a7f3d0' : '#e2e8f0',
+                    borderColor: status === 'complete' ? '#a7f3d0' : isPriority ? '#fecaca' : '#e2e8f0',
                     borderRadius: 14, padding: 18, cursor: "pointer",
-                    animationDelay: `${i * 0.04}s`
+                    animationDelay: `${i * 0.04}s`,
+                    position: "relative"
                   }}
                     onClick={() => runSectorResearch(sector)}
                   >
+                    {isPriority && (
+                      <div className="priority-badge" style={{
+                        position: "absolute", top: 10, right: 10,
+                        background: "#dc2626", color: "#fff",
+                        fontSize: 9, fontWeight: 700, padding: "2px 7px",
+                        borderRadius: 10, letterSpacing: "0.05em"
+                      }}>ÖNCELİKLİ</div>
+                    )}
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 10 }}>
-                      <span style={{ fontSize: 28 }}>{s.icon}</span>
-                      {status === 'complete' && (
-                        <span style={{ fontSize: 10, color: "#059669", background: "rgba(16,185,129,0.1)", padding: "3px 8px", borderRadius: 10, fontWeight: 600 }}>✓ Tamamlandı</span>
-                      )}
-                      {status === 'researching' && (
-                        <span className="pulse-anim" style={{ fontSize: 10, color: "#d97706", background: "rgba(245,158,11,0.1)", padding: "3px 8px", borderRadius: 10, fontWeight: 600 }}>⏳ Araştırılıyor</span>
-                      )}
+                      <span style={{ fontSize: 26 }}>{s.icon}</span>
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4 }}>
+                        {status === 'complete' && (
+                          <span style={{ fontSize: 10, color: "#059669", background: "rgba(16,185,129,0.1)", padding: "3px 8px", borderRadius: 10, fontWeight: 600 }}>✓ Tamamlandı</span>
+                        )}
+                        {status === 'researching' && (
+                          <span className="pulse-anim" style={{ fontSize: 10, color: "#d97706", background: "rgba(245,158,11,0.1)", padding: "3px 8px", borderRadius: 10, fontWeight: 600 }}>⏳ Araştırılıyor</span>
+                        )}
+                      </div>
                     </div>
                     <h3 style={{ fontSize: 14, fontWeight: 700, color: "#0f172a", marginBottom: 6 }}>{sector}</h3>
                     <p style={{ fontSize: 12, color: "#64748b", marginBottom: 10, lineHeight: 1.5 }}>{s.reason}</p>
@@ -684,6 +937,104 @@ export default function StingaLeadAgent() {
                   </div>
                 </div>
 
+                {/* Visual AI Analysis Panel */}
+                {AI_ANALYSIS_CONFIG[selectedSector] && (
+                  <div style={{ marginBottom: 18 }}>
+                    {/* Header */}
+                    <div style={{
+                      background: "linear-gradient(135deg, #0f172a, #1e3a2f)",
+                      borderRadius: "14px 14px 0 0",
+                      padding: "14px 20px",
+                      display: "flex", alignItems: "center", gap: 10
+                    }}>
+                      <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px rgba(16,185,129,0.6)" }} />
+                      <span style={{ fontSize: 14, fontWeight: 700, color: "#fff" }}>🤖 AI Sektör Analiz Paneli</span>
+                      <span style={{ marginLeft: "auto", fontSize: 11, color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono', monospace" }}>
+                        {selectedSector}
+                      </span>
+                    </div>
+
+                    <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: "0 0 14px 14px", padding: 20 }}>
+
+                      {/* Urgency Score */}
+                      <div style={{ marginBottom: 20 }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                          <span style={{ fontSize: 12, fontWeight: 700, color: "#0f172a" }}>📈 Öncelik Skoru</span>
+                          <span style={{ fontSize: 22, fontWeight: 800, color: AI_ANALYSIS_CONFIG[selectedSector].urgencyScore >= 85 ? "#dc2626" : "#d97706" }}>
+                            {AI_ANALYSIS_CONFIG[selectedSector].urgencyScore}/100
+                          </span>
+                        </div>
+                        <div style={{ height: 8, background: "#f1f5f9", borderRadius: 4, overflow: "hidden" }}>
+                          <div className="urgency-bar" style={{
+                            height: "100%",
+                            width: `${AI_ANALYSIS_CONFIG[selectedSector].urgencyScore}%`,
+                            background: AI_ANALYSIS_CONFIG[selectedSector].urgencyScore >= 85
+                              ? "linear-gradient(90deg, #ef4444, #dc2626)"
+                              : "linear-gradient(90deg, #f59e0b, #d97706)",
+                            borderRadius: 4
+                          }} />
+                        </div>
+                      </div>
+
+                      {/* Pain Points */}
+                      <div style={{ marginBottom: 20 }}>
+                        <h4 style={{ fontSize: 12, fontWeight: 700, color: "#dc2626", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>⚠️ Sektörün Kritik Sorunları</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 10 }}>
+                          {AI_ANALYSIS_CONFIG[selectedSector].painPoints.map((p, i) => (
+                            <div key={i} className="ai-card" style={{
+                              background: "#fef2f2", border: "1px solid #fecaca",
+                              borderRadius: 10, padding: 12,
+                              animationDelay: `${i * 0.1}s`
+                            }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 4 }}>
+                                <span style={{ fontSize: 18 }}>{p.icon}</span>
+                                <span style={{
+                                  fontSize: 9, fontWeight: 700,
+                                  color: p.severity === "Kritik" ? "#dc2626" : p.severity === "Yüksek" ? "#d97706" : "#64748b",
+                                  background: p.severity === "Kritik" ? "#fee2e2" : p.severity === "Yüksek" ? "#fef3c7" : "#f1f5f9",
+                                  padding: "2px 6px", borderRadius: 6
+                                }}>{p.severity}</span>
+                              </div>
+                              <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{p.title}</div>
+                              <div style={{ fontSize: 11, color: "#475569", lineHeight: 1.5 }}>{p.desc}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Stinga Advantages */}
+                      <div style={{ marginBottom: 20 }}>
+                        <h4 style={{ fontSize: 12, fontWeight: 700, color: "#059669", marginBottom: 10, textTransform: "uppercase", letterSpacing: "0.05em" }}>✅ Stinga'nın Avantajları</h4>
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))", gap: 10 }}>
+                          {AI_ANALYSIS_CONFIG[selectedSector].stingaAdvantages.map((a, i) => (
+                            <div key={i} className="ai-card" style={{
+                              background: "#f0fdf4", border: "1px solid #a7f3d0",
+                              borderRadius: 10, padding: 12,
+                              animationDelay: `${i * 0.1}s`
+                            }}>
+                              <span style={{ fontSize: 18, display: "block", marginBottom: 4 }}>{a.icon}</span>
+                              <div style={{ fontSize: 12, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>{a.title}</div>
+                              <div style={{ fontSize: 11, color: "#475569", lineHeight: 1.5 }}>{a.desc}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Market + Sales Tip */}
+                      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                        <div style={{ background: "#f0f9ff", border: "1px solid #bfdbfe", borderRadius: 10, padding: 14 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: "#2563eb", marginBottom: 6 }}>📊 Pazar Büyüklüğü</div>
+                          <div style={{ fontSize: 12, color: "#1e3a5f", lineHeight: 1.5 }}>{AI_ANALYSIS_CONFIG[selectedSector].marketSize}</div>
+                        </div>
+                        <div style={{ background: "#fefce8", border: "1px solid #fde68a", borderRadius: 10, padding: 14 }}>
+                          <div style={{ fontSize: 11, fontWeight: 700, color: "#d97706", marginBottom: 6 }}>💡 Satış İpucu</div>
+                          <div style={{ fontSize: 12, color: "#78350f", lineHeight: 1.5 }}>{AI_ANALYSIS_CONFIG[selectedSector].salesTip}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Company Table */}
                 <div style={{
                   background: "#fff", border: "1px solid #e2e8f0",
@@ -691,7 +1042,7 @@ export default function StingaLeadAgent() {
                 }}>
                   <div style={{ padding: "14px 20px", borderBottom: "1px solid #e2e8f0" }}>
                     <h3 style={{ fontSize: 14, fontWeight: 600, color: "#0f172a" }}>
-                      Potansiyel Müşteri Listesi ({KNOWN_COMPANIES[selectedSector]?.length || 0})
+                      Potansiyel Müşteri Listesi ({KNOWN_COMPANIES[selectedSector]?.length || 0} firma)
                     </h3>
                   </div>
                   <div style={{ overflowX: "auto" }}>
@@ -700,7 +1051,7 @@ export default function StingaLeadAgent() {
                         <tr style={{ borderBottom: "1px solid #e2e8f0", color: "#64748b", background: "#f8fafc" }}>
                           <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>Firma</th>
                           <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>Şehir</th>
-                          <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>İhtiyaç</th>
+                          <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>Stinga İhtiyacı</th>
                           <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>Durum</th>
                           <th style={{ padding: "10px 16px", textAlign: "left", fontWeight: 600 }}>İşlem</th>
                         </tr>
@@ -746,18 +1097,23 @@ export default function StingaLeadAgent() {
                   </div>
                 </div>
 
-                {/* AI Analysis */}
+                {/* AI Text Analysis (from API call) */}
                 {searchResults[selectedSector]?.analysis && (
                   <div style={{
-                    background: "#fff", border: "1px solid #a7f3d0",
+                    background: "linear-gradient(135deg, #f0fdf4, #f0f9ff)",
+                    border: "1px solid #a7f3d0",
                     borderRadius: 14, padding: 20
                   }}>
-                    <h3 style={{ fontSize: 14, fontWeight: 600, color: "#059669", marginBottom: 12 }}>
-                      🤖 AI Sektör Analizi & Öneriler
-                    </h3>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+                      <div className="blink" style={{ width: 7, height: 7, borderRadius: "50%", background: "#10b981" }} />
+                      <h3 style={{ fontSize: 14, fontWeight: 700, color: "#059669" }}>
+                        🤖 AI Satış Strateji Raporu
+                      </h3>
+                    </div>
                     <div style={{
-                      fontSize: 13, color: "#334155", lineHeight: 1.7,
-                      whiteSpace: "pre-wrap"
+                      fontSize: 13, color: "#334155", lineHeight: 1.8,
+                      background: "#fff", borderRadius: 10, padding: 16,
+                      border: "1px solid #d1fae5"
                     }}>
                       {searchResults[selectedSector].analysis}
                     </div>
@@ -766,9 +1122,11 @@ export default function StingaLeadAgent() {
 
                 {isSearching && (
                   <div className="pulse-anim" style={{
-                    textAlign: "center", padding: 30, color: "#d97706", fontSize: 14
+                    textAlign: "center", padding: 30,
+                    background: "#fff", border: "1px solid #e2e8f0",
+                    borderRadius: 14, color: "#d97706", fontSize: 14
                   }}>
-                    ⏳ AI araştırma yapıyor... Bu işlem 15-30 saniye sürebilir.
+                    ⏳ AI strateji raporu hazırlanıyor...
                   </div>
                 )}
               </>
@@ -882,8 +1240,8 @@ export default function StingaLeadAgent() {
 
         {/* CHAT */}
         {activeTab === "chat" && (
-          <div className="fade-up" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 200px)" }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 12 }}>
+          <div className="fade-up" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 220px)" }}>
+            <h2 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", marginBottom: 8 }}>
               🤖 Stinga AI Satış Asistanı
             </h2>
             <p style={{ fontSize: 12, color: "#64748b", marginBottom: 16 }}>
@@ -901,11 +1259,11 @@ export default function StingaLeadAgent() {
                   <p style={{ fontSize: 13, color: "#64748b" }}>Örnek sorular:</p>
                   <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 12, alignItems: "center" }}>
                     {[
-                      "Tavuk çiftlikleri için satış stratejisi öner",
-                      "Kömür madenciliği firmalarına nasıl yaklaşmalıyız?",
-                      "Erdemir'e nasıl teklif hazırlamalıyız?",
-                      "Kümes ısıtma kazanlarımızın avantajları neler?",
-                      "Hangi firmalar arıtma çamuru bertarafı yapıyor?"
+                      "Belediye arıtma çamuru bertarafı için satış stratejisi öner",
+                      "Arıtma çamuru sektöründeki en kritik müşteriler hangileri?",
+                      "Karbon ayak izi firmaları Stinga'yı nasıl kullanabilir?",
+                      "İSKİ'ye nasıl teklif hazırlamalıyız?",
+                      "Hangi sektörde önce harekete geçmeliyiz?"
                     ].map((q, i) => (
                       <button key={i} onClick={() => setChatInput(q)}
                         style={{
@@ -1054,7 +1412,6 @@ export default function StingaLeadAgent() {
               <div style={{ fontSize: 13, color: "#334155", lineHeight: 1.6 }}>{selectedCompany.note}</div>
             </div>
 
-            {/* Lead Note */}
             <div style={{ marginBottom: 14 }}>
               <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, marginBottom: 6 }}>Notlarınız</div>
               <textarea
@@ -1070,7 +1427,6 @@ export default function StingaLeadAgent() {
               />
             </div>
 
-            {/* Status */}
             <div style={{ marginBottom: 18 }}>
               <div style={{ fontSize: 11, color: "#94a3b8", fontWeight: 600, marginBottom: 8 }}>Lead Durumu</div>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -1086,7 +1442,6 @@ export default function StingaLeadAgent() {
               </div>
             </div>
 
-            {/* Actions */}
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {selectedCompany.lat && selectedCompany.lng && (
                 <a href={`https://www.google.com/maps/search/?api=1&query=${selectedCompany.lat},${selectedCompany.lng}`}
@@ -1125,13 +1480,13 @@ export default function StingaLeadAgent() {
 
       {/* Footer */}
       <footer style={{
-        padding: "12px 24px", borderTop: "1px solid #e2e8f0",
+        padding: "10px 24px", borderTop: "1px solid #e2e8f0",
         background: "#fff", textAlign: "center",
         fontSize: 11, color: "#94a3b8",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8
       }}>
-        <img src={STINGA_LOGO} alt="" style={{ width: 22, height: 22, borderRadius: "50%", border: "1px solid #e2e8f0" }} />
-        Stinga Lead Agent v2.0 — AI destekli B2B müşteri araştırma platformu — Gemini AI ile güçlendirilmiştir
+        <img src={STINGA_LOGO} alt="" style={{ width: 20, height: 20, borderRadius: "50%", border: "1px solid #e2e8f0" }} />
+        Stinga Lead Agent v3.0 — AI destekli B2B müşteri araştırma platformu — Claude AI ile güçlendirilmiştir
       </footer>
     </div>
   );
