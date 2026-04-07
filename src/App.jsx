@@ -459,8 +459,8 @@ Sadece JSON döndür, başka açıklama yapma.`;
     { label: "HEDEF",    value: totalLeads,          color: "#34d399" },
     { label: "SEKTÖR",   value: sectorKeys.length,   color: "#60a5fa" },
     { label: "ANALİZ",   value: `${completedSects}/${sectorKeys.length}`, color: "#a78bfa" },
-    { label: "İLETŞM",  value: stats.contacted,     color: "#38bdf8" },
-    { label: "KAZANLD",  value: stats.won,            color: "#fbbf24" },
+    { label: "İLETŞİM",  value: stats.contacted,     color: "#38bdf8" },
+    { label: "KAZANLDI",  value: stats.won,            color: "#fbbf24" },
     { label: "NOT",      value: stats.totalNotes,    color: "#f472b6" },
   ];
 
