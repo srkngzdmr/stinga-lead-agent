@@ -23,46 +23,56 @@ app.post('/api/ai-search', async (req, res) => {
   try {
     console.log('[Gemini 2.5 Flash] Sending request...');
 
-    const geminiRes = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `${systemPrompt || ''}\n\n${prompt}` }] }],
-          generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
-          tools: [{ googleSearch: {} }]
-        })
-      }
-    );
+    const models = ['gemini-2.5-flash', 'gemini-2.5-flash-lite'];
 
-    const data = await geminiRes.json();
+    for (const model of models) {
+      console.log(`[Gemini] Trying ${model}...`);
 
-    if (data.error) {
-      console.error('[Gemini] API Error:', JSON.stringify(data.error));
-      return res.json({ success: false, error: data.error.message || 'Gemini API hatası' });
-    }
-
-    // Extract text from response
-    let text = '';
-    if (data?.candidates?.[0]?.content?.parts) {
-      const parts = data.candidates[0].content.parts;
-      const textParts = [];
-      for (const part of parts) {
-        if (part.text) {
-          textParts.push(part.text);
+      const geminiRes = await fetch(
+        `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GEMINI_API_KEY}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `${systemPrompt || ''}\n\n${prompt}` }] }],
+            generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
+            tools: [{ googleSearch: {} }]
+          })
         }
+      );
+
+      const data = await geminiRes.json();
+
+      if (data.error) {
+        console.error(`[Gemini ${model}] Error:`, data.error.message);
+        // If unavailable, try next model
+        if (data.error.code === 503 || data.error.code === 429) continue;
+        return res.json({ success: false, error: data.error.message || 'Gemini API hatası' });
       }
-      text = textParts.join('\n');
+
+      // Extract text from response
+      let text = '';
+      if (data?.candidates?.[0]?.content?.parts) {
+        const parts = data.candidates[0].content.parts;
+        const textParts = [];
+        for (const part of parts) {
+          if (part.text) {
+            textParts.push(part.text);
+          }
+        }
+        text = textParts.join('\n');
+      }
+
+      if (text) {
+        console.log(`[Gemini ${model}] Success, response length:`, text.length);
+        return res.json({ success: true, provider: `gemini-${model}`, result: text });
+      } else {
+        console.log(`[Gemini ${model}] Empty response.`);
+        continue;
+      }
     }
 
-    if (text) {
-      console.log('[Gemini] Success, response length:', text.length);
-      return res.json({ success: true, provider: 'gemini', result: text });
-    } else {
-      console.log('[Gemini] Empty response. Full data:', JSON.stringify(data).substring(0, 500));
-      return res.json({ success: false, error: 'Gemini boş yanıt döndü.' });
-    }
+    return res.json({ success: false, error: 'Tüm Gemini modelleri şu an meşgul. Lütfen biraz sonra tekrar deneyin.' });
   } catch (err) {
     console.error('[API] Error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
