@@ -278,7 +278,7 @@ export default function StingaLeadAgent() {
       throw new Error("API anahtarı girilmedi. Header'daki 'API KEY' alanına Gemini anahtarınızı girin.");
     }
     // Model sıralaması: önce 2.0-flash, hata alırsa 1.5-flash
-    const models = ["gemini-2.0-flash", "gemini-1.5-flash"];
+    const models = ["gemini-2.5-flash-preview-05-20", "gemini-2.0-flash", "gemini-1.5-flash"];
     let lastErr = null;
     for (const model of models) {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
@@ -523,45 +523,45 @@ Sadece JSON döndür, başka açıklama yapma.`;
       `}</style>
 
       {/* ── BANNER ── */}
-      <div className="banner-active" style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a2f 50%,#0f172a 100%)", borderBottom: "1px solid rgba(16,185,129,0.3)", padding: "6px 16px", position: "relative", overflow: "hidden" }}>
+      <div className="banner-active" style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a2f 50%,#0f172a 100%)", borderBottom: "1px solid rgba(16,185,129,0.3)", padding: "10px 20px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(16,185,129,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,0.03) 1px,transparent 1px)", backgroundSize: "20px 20px", pointerEvents: "none" }} />
-        <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", alignItems: "center", gap: 12, position: "relative", zIndex: 1 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "auto 1fr auto", alignItems: "center", gap: 16, position: "relative", zIndex: 1 }}>
 
           {/* SOL */}
-          <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-            <svg viewBox="0 0 28 28" width="20" height="20" style={{ flexShrink: 0 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <svg viewBox="0 0 28 28" width="28" height="28" style={{ flexShrink: 0 }}>
               <circle cx="14" cy="14" r="12" stroke="rgba(16,185,129,0.15)" strokeWidth="1.5" fill="none" />
               <circle cx="14" cy="14" r="7" stroke="rgba(16,185,129,0.25)" strokeWidth="1" fill="none" />
-              <circle cx="14" cy="14" r="2.5" fill="#10b981" />
-              <g className="radar"><path d="M14 14 L14 2" stroke="rgba(16,185,129,0.6)" strokeWidth="1.5" strokeLinecap="round" /></g>
+              <circle cx="14" cy="14" r="3" fill="#10b981" />
+              <g className="radar"><path d="M14 14 L14 2" stroke="rgba(16,185,129,0.6)" strokeWidth="2" strokeLinecap="round" /></g>
             </svg>
-            <div className="blink" style={{ width: 5, height: 5, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 5px 2px rgba(16,185,129,0.5)" }} />
-            <span style={{ fontSize: 9, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
-            <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 4, padding: "1px 5px", fontSize: 7, color: "#10b981", fontWeight: 700 }}>v4.1</span>
-            {apiStatus === "loading" && <span style={{ fontSize: 8, color: "#fbbf24", fontWeight: 700 }}>◉ AI</span>}
-            {apiStatus === "ok"      && <span style={{ fontSize: 8, color: "#10b981", fontWeight: 700 }}>✓ OK</span>}
-            {apiStatus === "error"   && <span title={apiError} style={{ fontSize: 8, color: "#f87171", fontWeight: 700, cursor: "help" }}>✕ ERR</span>}
+            <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px 3px rgba(16,185,129,0.5)" }} />
+            <span style={{ fontSize: 13, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
+            <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.1</span>
+            {apiStatus === "loading" && <span style={{ fontSize: 11, color: "#fbbf24", fontWeight: 700 }}>◉ AI</span>}
+            {apiStatus === "ok"      && <span style={{ fontSize: 11, color: "#10b981", fontWeight: 700 }}>✓ OK</span>}
+            {apiStatus === "error"   && <span title={apiError} style={{ fontSize: 11, color: "#f87171", fontWeight: 700, cursor: "help" }}>✕ ERR</span>}
           </div>
 
           {/* ORTA — metrikler eşit dağılımlı */}
-          <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 0 }}>
+          <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             {BANNER_METRICS.map((m, i) => (
-              <div key={i} style={{ flex: 1, textAlign: "center", borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.06)" : "none", padding: "0 10px" }}>
-                <div style={{ fontSize: 7, color: "rgba(255,255,255,0.35)", fontWeight: 700, letterSpacing: "0.1em", fontFamily: "'JetBrains Mono',monospace" }}>{m.label}</div>
-                <div style={{ fontSize: 12, fontWeight: 700, color: m.color, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1.2 }}>{m.value}</div>
+              <div key={i} style={{ flex: 1, textAlign: "center", borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.08)" : "none", padding: "0 14px" }}>
+                <div style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", fontWeight: 700, letterSpacing: "0.1em", fontFamily: "'JetBrains Mono',monospace", marginBottom: 2 }}>{m.label}</div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: m.color, fontFamily: "'JetBrains Mono',monospace", lineHeight: 1 }}>{m.value}</div>
               </div>
             ))}
           </div>
 
           {/* SAĞ */}
-          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 9, color: "rgba(16,185,129,0.6)", fontFamily: "'JetBrains Mono',monospace" }}>{dots}</span>
-            <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 12 }}>
-              {[4, 7, 9, 12].map((h, i) => (
-                <div key={i} className={i < 3 ? "blink" : ""} style={{ width: 3, height: h, background: i < 3 ? "#10b981" : "rgba(16,185,129,0.2)", borderRadius: 1.5, animationDelay: `${i * 0.15}s` }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ fontSize: 12, color: "rgba(16,185,129,0.6)", fontFamily: "'JetBrains Mono',monospace" }}>{dots}</span>
+            <div style={{ display: "flex", alignItems: "flex-end", gap: 3, height: 16 }}>
+              {[5, 9, 12, 16].map((h, i) => (
+                <div key={i} className={i < 3 ? "blink" : ""} style={{ width: 4, height: h, background: i < 3 ? "#10b981" : "rgba(16,185,129,0.2)", borderRadius: 2, animationDelay: `${i * 0.15}s` }} />
               ))}
             </div>
-            <span style={{ fontSize: 9, color: "rgba(255,255,255,0.4)", fontFamily: "'JetBrains Mono',monospace" }}>{clock.toLocaleTimeString("tr-TR")}</span>
+            <span style={{ fontSize: 12, color: "rgba(255,255,255,0.5)", fontFamily: "'JetBrains Mono',monospace" }}>{clock.toLocaleTimeString("tr-TR")}</span>
           </div>
         </div>
       </div>
