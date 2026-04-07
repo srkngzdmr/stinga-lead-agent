@@ -260,7 +260,88 @@ const KNOWN_COMPANIES = {
   ],
 };
 
-// ─── localStorage yardımcıları ───────────────────────────────
+// ─── EXCEL EXPORT ────────────────────────────────────────────
+const exportToExcel = (companies, leadStatuses, noteEntries) => {
+  const rows = companies.map((c, i) => [
+    i + 1, c.name, c.sectorLabel || c.sector, c.city || "",
+    c.phone || "", c.email || "", c.website || "", c.linkedin || "",
+    c.need, c.note,
+    LEAD_STATUSES[leadStatuses[c.name] || "new"]?.label || "Yeni",
+    (noteEntries[c.name] || []).map(n => n.text).join(" | "),
+  ]);
+
+  const header = ["#","Firma Adı","Sektör","Şehir","Telefon","E-Posta","Website","LinkedIn","Stinga İhtiyacı","Firma Notu","Lead Durumu","Notlar"];
+  const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
+  const bom = "\uFEFF";
+  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `stinga-leads-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); URL.revokeObjectURL(url);
+};
+
+// ─── PDF EXPORT ──────────────────────────────────────────────
+const exportToPDF = (companies, leadStatuses) => {
+  const date = new Date().toLocaleDateString("tr-TR");
+  const rows = companies.map((c, i) => `
+    <tr style="background:${i%2===0?"#f9fafb":"#fff"}">
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:11px;font-weight:600">${c.name}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px">${c.sectorLabel||c.sector}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px">${c.city||"-"}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px">${c.phone||"-"}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px">${c.email||"-"}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px;color:#059669">${c.need}</td>
+      <td style="padding:6px 8px;border:1px solid #e5e7eb;font-size:10px">${LEAD_STATUSES[leadStatuses[c.name]||"new"]?.label||"Yeni"}</td>
+    </tr>`).join("");
+
+  const html = `<!DOCTYPE html><html><head><meta charset="utf-8"><title>Stinga Lead Raporu</title>
+  <style>body{font-family:Arial,sans-serif;margin:20px;color:#1e293b}
+  h1{color:#059669;font-size:20px;margin-bottom:4px}
+  .meta{font-size:11px;color:#64748b;margin-bottom:16px}
+  table{width:100%;border-collapse:collapse}
+  th{background:#0f172a;color:#10b981;padding:8px;font-size:11px;text-align:left;border:1px solid #1e293b}
+  </style></head><body>
+  <h1>🎯 Stinga Enerji — Lead Raporu</h1>
+  <div class="meta">Oluşturma tarihi: ${date} · Toplam: ${companies.length} firma</div>
+  <table><thead><tr>
+    <th>Firma</th><th>Sektör</th><th>Şehir</th><th>Telefon</th><th>E-Posta</th><th>Stinga İhtiyacı</th><th>Durum</th>
+  </tr></thead><tbody>${rows}</tbody></table>
+  </body></html>`;
+
+  const blob = new Blob([html], { type: "text/html;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const w = window.open(url, "_blank");
+  setTimeout(() => { if(w) { w.print(); URL.revokeObjectURL(url); } }, 800);
+};
+
+// ─── MAİL ŞABLONU ────────────────────────────────────────────
+const generateMailTemplate = (company) => `Konu: Stinga Enerji — ${company.need} için Emisyonsuz Çözüm Önerimiz
+
+Sayın ${company.contacts?.[0]?.title || "Yetkili"},
+
+${company.name} olarak faaliyet gösterdiğiniz ${company.sector} sektöründe karşılaştığınız ${company.need.toLowerCase()} konusunda size özel bir çözüm sunmak istiyoruz.
+
+Stinga Enerji A.Ş. olarak 18 yıllık AR-GE sürecimizin ürünü olan 4D Reaktör teknolojimizle:
+
+✅ %97 yanma verimi ile enerji maliyetlerinizi düşürüyoruz
+✅ CO: 12 ppm (yasal sınırın 20 katı altında) ile sıfır emisyon sağlıyoruz  
+✅ 134 ülkede tescilli patentimizle dünya standartlarında hizmet veriyoruz
+✅ TÜBİTAK ve ENKA Laboratuvarı onaylı bağımsız test raporlarımız mevcuttur
+
+${company.name} bünyenizde ${company.need} konusunda sunabileceğimiz çözümler:
+${company.note}
+
+AB SKDM (Sınırda Karbon Düzenleme Mekanizması) kapsamında 2026 itibarıyla karbon vergisi yükümlülüğü başlamadan önce emisyon değerlerinizi düşürmeniz kritik önem taşımaktadır. Stinga teknolojisi bu süreçte size doğrulanabilir karbon azaltımı ve maliyet tasarrufu sağlayacaktır.
+
+Sizi bilgilendirmek ve teknik detayları paylaşmak adına 20 dakikalık bir online görüşme talep edebilir miyiz?
+
+Saygılarımla,
+Stinga Enerji A.Ş. — Satış & İş Geliştirme
+📞 +90 212 872 23 57
+✉️ info@stinga.biz
+🌐 www.stinga.biz`;
+
+
 const LS = {
   STATUSES:     "stinga_statuses_v4",
   NOTE_ENTRIES: "stinga_note_entries_v4",
@@ -303,6 +384,7 @@ export default function StingaLeadAgent() {
   const [contactSearching, setContactSearching] = useState(false);
   const [foundContacts, setFoundContacts]     = useState(() => lsGet(LS.FOUND_CONTACTS, {}));
   const [editingNote, setEditingNote]         = useState(null);
+  const [mailModal, setMailModal]             = useState(null); // {company, text}
 
   const chatEndRef = useRef(null);
 
@@ -626,6 +708,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
           { id: "dashboard", label: "📊 Dashboard" },
           { id: "results",   label: "🔍 Araştırma" },
           { id: "leads",     label: "📋 Lead Yönetimi" },
+          { id: "export",    label: "📤 Dışa Aktar" },
           { id: "notebook",  label: `📓 Not Defteri${stats.totalNotes > 0 ? ` (${stats.totalNotes})` : ""}` },
           { id: "chat",      label: "🤖 Stinga Yapay Zeka" },
           { id: "log",       label: "📝 Log" },
@@ -650,11 +733,33 @@ Sadece JSON döndür, başka açıklama yapma.`;
             <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a2f 60%,#0f172a 100%)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 18, padding: "28px 28px 24px", marginBottom: 16, position: "relative", overflow: "hidden" }}>
               {/* Arka plan grid */}
               <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(16,185,129,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,0.04) 1px,transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none" }} />
-              {/* Scan line animasyonu */}
+              {/* Shimmer */}
               <div className="hero-shimmer" style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />
-              {/* Hareketli parçacıklar */}
-              {[...Array(6)].map((_, i) => (
-                <div key={i} style={{ position: "absolute", width: 4, height: 4, borderRadius: "50%", background: "#10b981", opacity: 0.4, left: `${15 + i * 14}%`, bottom: "10%", animation: `particleFloat ${2 + i * 0.4}s ease-out infinite`, animationDelay: `${i * 0.5}s` }} />
+              {/* Matrix / Kod yağmuru karakterleri */}
+              {["01","AI","B2","CO","TR","Σ","λ","∞","░","▒","10","11","∂","π"].map((char, i) => (
+                <div key={i} style={{
+                  position: "absolute",
+                  fontFamily: "'JetBrains Mono',monospace",
+                  fontSize: 10 + (i % 3) * 2,
+                  color: i % 3 === 0 ? "rgba(16,185,129,0.5)" : i % 3 === 1 ? "rgba(96,165,250,0.35)" : "rgba(167,139,250,0.3)",
+                  left: `${(i * 7.1) % 95}%`,
+                  top: `${(i * 13) % 80}%`,
+                  animation: `particleFloat ${3 + (i % 4) * 0.8}s ease-in-out infinite`,
+                  animationDelay: `${i * 0.35}s`,
+                  fontWeight: 700,
+                  letterSpacing: "0.05em",
+                  pointerEvents: "none",
+                }}>{char}</div>
+              ))}
+              {/* Yatay tarama çizgileri */}
+              {[...Array(3)].map((_, i) => (
+                <div key={i} style={{
+                  position: "absolute", left: 0, right: 0, height: 1,
+                  background: "linear-gradient(90deg,transparent,rgba(16,185,129,0.15),transparent)",
+                  animation: `scanLine ${3 + i * 1.2}s linear infinite`,
+                  animationDelay: `${i * 1.1}s`,
+                  pointerEvents: "none",
+                }} />
               ))}
               <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 20 }}>
                 <div style={{ flex: 1, minWidth: 260 }}>
@@ -1038,6 +1143,69 @@ Sadece JSON döndür, başka açıklama yapma.`;
           </div>
         )}
 
+        {/* DIŞA AKTAR */}
+        {activeTab === "export" && (
+          <div className="fade-up">
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16, flexWrap: "wrap", gap: 10 }}>
+              <div>
+                <h2 style={{ fontSize: 17, fontWeight: 700, color: "#0f172a" }}>📤 Dışa Aktar</h2>
+                <p style={{ fontSize: 11, color: "#64748b", marginTop: 2 }}>Tüm lead listesini Excel/PDF olarak indirin, firma bazlı satış maili oluşturun.</p>
+              </div>
+              <div style={{ display: "flex", gap: 8 }}>
+                <button className="action-btn" onClick={() => exportToExcel(Object.entries(KNOWN_COMPANIES).flatMap(([sec,cs])=>cs.map(c=>({...c,sectorLabel:sec}))), leadStatuses, noteEntries)}
+                  style={{ background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
+                  📊 Excel İndir (CSV)
+                </button>
+                <button className="action-btn" onClick={() => exportToPDF(Object.entries(KNOWN_COMPANIES).flatMap(([sec,cs])=>cs.map(c=>({...c,sectorLabel:sec}))), leadStatuses)}
+                  style={{ background: "linear-gradient(135deg,#dc2626,#b91c1c)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
+                  📄 PDF İndir
+                </button>
+              </div>
+            </div>
+
+            {/* Sektör bazlı firma listesi + mail butonu */}
+            {Object.entries(KNOWN_COMPANIES).map(([sector, companies]) => (
+              <div key={sector} style={{ marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+                  <span style={{ fontSize: 16 }}>{SECTOR_QUERIES[sector]?.icon}</span>
+                  <h3 style={{ fontSize: 13, fontWeight: 700, color: "#0f172a" }}>{sector}</h3>
+                  <span style={{ fontSize: 10, color: "#64748b", background: "#f1f5f9", padding: "2px 7px", borderRadius: 10 }}>{companies.length} firma</span>
+                </div>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))", gap: 10 }}>
+                  {companies.map((company, i) => (
+                    <div key={i} style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 12, padding: 14, transition: "all 0.18s" }}
+                      onMouseEnter={e => e.currentTarget.style.borderColor = "#10b981"}
+                      onMouseLeave={e => e.currentTarget.style.borderColor = "#e2e8f0"}>
+                      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                        <div>
+                          <div style={{ fontSize: 13, fontWeight: 700, color: "#0f172a", marginBottom: 2 }}>{company.name}</div>
+                          <div style={{ fontSize: 10, color: "#64748b" }}>{company.city || "-"} · {company.sector}</div>
+                        </div>
+                        <span style={{ fontSize: 9, background: LEAD_STATUSES[leadStatuses[company.name]||"new"].bg, color: LEAD_STATUSES[leadStatuses[company.name]||"new"].color, padding: "2px 7px", borderRadius: 10, fontWeight: 700, whiteSpace: "nowrap" }}>
+                          {LEAD_STATUSES[leadStatuses[company.name]||"new"].label}
+                        </span>
+                      </div>
+                      <div style={{ fontSize: 11, color: "#059669", background: "rgba(16,185,129,0.06)", border: "1px solid rgba(16,185,129,0.15)", borderRadius: 6, padding: "4px 8px", marginBottom: 10 }}>
+                        {company.need}
+                      </div>
+                      <div style={{ display: "flex", gap: 6 }}>
+                        <button className="action-btn" onClick={() => setMailModal({ company, text: generateMailTemplate({...company, sectorLabel: sector}) })}
+                          style={{ flex: 1, background: "linear-gradient(135deg,#6366f1,#4f46e5)", color: "#fff", border: "none", borderRadius: 8, padding: "6px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                          ✉️ Satış Maili Oluştur
+                        </button>
+                        <button className="action-btn" onClick={() => setSelectedCompany({...company, sectorLabel: sector})}
+                          style={{ background: "#f0f9ff", border: "1px solid #bfdbfe", color: "#2563eb", borderRadius: 8, padding: "6px 10px", fontSize: 11, fontWeight: 600, cursor: "pointer" }}>
+                          Detay
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
         {/* LOG */}
         {activeTab === "log" && (
           <div className="fade-up">
@@ -1089,6 +1257,14 @@ Sadece JSON döndür, başka açıklama yapma.`;
                 <span style={{ fontSize: 11, color: "#374151" }}>{selectedCompany.need}</span>
               </div>
               <p style={{ fontSize: 11, color: "#64748b", marginTop: 8, lineHeight: 1.6 }}>{selectedCompany.note}</p>
+            </div>
+
+            {/* Mail Şablonu Butonu */}
+            <div style={{ marginBottom: 14 }}>
+              <button className="action-btn" onClick={() => setMailModal({ company: selectedCompany, text: generateMailTemplate(selectedCompany) })}
+                style={{ width: "100%", background: "linear-gradient(135deg,#6366f1,#4f46e5)", color: "#fff", border: "none", borderRadius: 10, padding: "10px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                ✉️ Firmaya Özel Satış Maili Oluştur
+              </button>
             </div>
 
             {/* İletişim Kişileri */}
@@ -1182,6 +1358,54 @@ Sadece JSON döndür, başka açıklama yapma.`;
                   ))}
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── MAİL MODAL ── */}
+      {mailModal && (
+        <div className="modal-overlay" onClick={e => e.target === e.currentTarget && setMailModal(null)}>
+          <div className="modal-card" style={{ maxWidth: 720 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 14 }}>
+              <div>
+                <h2 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>✉️ Satış Maili Şablonu</h2>
+                <p style={{ fontSize: 11, color: "#64748b", marginTop: 3 }}>{mailModal.company.name} — Düzenleyip kopyalayabilirsiniz</p>
+              </div>
+              <div style={{ display: "flex", gap: 7 }}>
+                <button onClick={() => { navigator.clipboard.writeText(mailModal.text); addLog(`📋 "${mailModal.company.name}" mail kopyalandı`); }}
+                  style={{ background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: "none", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer" }}>
+                  📋 Kopyala
+                </button>
+                <a href={`mailto:${mailModal.company.email || ""}?subject=${encodeURIComponent("Stinga Enerji — " + mailModal.company.need + " için Çözüm Önerimiz")}&body=${encodeURIComponent(mailModal.text)}`}
+                  style={{ background: "linear-gradient(135deg,#6366f1,#4f46e5)", color: "#fff", borderRadius: 8, padding: "6px 14px", fontSize: 11, fontWeight: 700, cursor: "pointer", textDecoration: "none", display: "inline-flex", alignItems: "center" }}>
+                  📨 Mail Aç
+                </a>
+                <button onClick={() => setMailModal(null)} style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#94a3b8" }}>✕</button>
+              </div>
+            </div>
+            {/* Firma bilgi bandı */}
+            <div style={{ background: "linear-gradient(135deg,#f0fdf4,#f0f9ff)", border: "1px solid #d1fae5", borderRadius: 10, padding: "10px 14px", marginBottom: 12, display: "flex", gap: 16, flexWrap: "wrap", fontSize: 11 }}>
+              <span>🏢 <strong>{mailModal.company.name}</strong></span>
+              {mailModal.company.email && <span>✉️ {mailModal.company.email}</span>}
+              {mailModal.company.phone && <span>📞 {mailModal.company.phone}</span>}
+              {mailModal.company.city && <span>📍 {mailModal.company.city}</span>}
+            </div>
+            <textarea
+              value={mailModal.text}
+              onChange={e => setMailModal(prev => ({ ...prev, text: e.target.value }))}
+              rows={22}
+              style={{ width: "100%", background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "12px 14px", fontSize: 12, lineHeight: 1.7, resize: "vertical", fontFamily: "inherit", color: "#1e293b" }}
+            />
+            <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+              <button onClick={() => { navigator.clipboard.writeText(mailModal.text); addLog(`📋 "${mailModal.company.name}" mail kopyalandı`); }}
+                style={{ flex: 1, background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: "none", borderRadius: 9, padding: "10px", fontSize: 12, fontWeight: 700, cursor: "pointer" }}>
+                📋 Tamamını Kopyala
+              </button>
+              <a href={`mailto:${mailModal.company.email || ""}?subject=${encodeURIComponent("Stinga Enerji — " + mailModal.company.need + " için Çözüm Önerimiz")}&body=${encodeURIComponent(mailModal.text)}`}
+                style={{ flex: 1, background: "linear-gradient(135deg,#6366f1,#4f46e5)", color: "#fff", borderRadius: 9, padding: "10px", fontSize: 12, fontWeight: 700, cursor: "pointer", textDecoration: "none", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                📨 E-Posta İstemcisinde Aç
+              </a>
             </div>
           </div>
         </div>
