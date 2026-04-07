@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 
 // ============================================================
 // STINGA LEAD AGENT v4.2
@@ -31,19 +31,29 @@ const callGemini = async (prompt, systemInstruction = "") => {
   return data.result || "Yanıt alınamadı.";
 };
 
-// ─── Stinga Logo SVG (inline — GitHub CORS sorunu yok) ───────
-const StingaLogo = ({ size = 40 }) => (
-  <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#10b981" strokeWidth="3"/>
-    <path d="M50 18 L62 38 L82 38 L66 52 L72 72 L50 60 L28 72 L34 52 L18 38 L38 38 Z"
-      fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinejoin="round"/>
-    <path d="M50 28 L58 43 L74 43 L61 53 L66 68 L50 59 L34 68 L39 53 L26 43 L42 43 Z"
-      fill="#10b981" opacity="0.3"/>
-    <circle cx="50" cy="50" r="6" fill="#10b981"/>
-    <text x="50" y="90" textAnchor="middle" fill="#10b981" fontSize="11" fontWeight="700"
-      fontFamily="'JetBrains Mono', monospace" letterSpacing="1">STINGA</text>
-  </svg>
-);
+// ─── Stinga Logo (GitHub raw — beyaz yuvarlak çerçeveli) ────
+const STINGA_LOGO_URL = "https://raw.githubusercontent.com/srkngzdmr/stinga-lead-agent/refs/heads/master/stinga_logo_ic_i_beyaz_c_erc_eveli-02.png";
+
+const StingaLogo = ({ size = 40 }) => {
+  const [err, setErr] = React.useState(false);
+  return err ? (
+    <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#10b981" strokeWidth="3"/>
+      <path d="M50 18 L62 38 L82 38 L66 52 L72 72 L50 60 L28 72 L34 52 L18 38 L38 38 Z"
+        fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinejoin="round"/>
+      <circle cx="50" cy="50" r="6" fill="#10b981"/>
+    </svg>
+  ) : (
+    <img
+      src={STINGA_LOGO_URL}
+      alt="Stinga"
+      width={size}
+      height={size}
+      onError={() => setErr(true)}
+      style={{ borderRadius: "50%", objectFit: "contain", display: "block" }}
+    />
+  );
+};
 
 // ─── Stinga Bağlamı ─────────────────────────────────────────
 const STINGA_CONTEXT = `
@@ -459,8 +469,8 @@ Sadece JSON döndür, başka açıklama yapma.`;
     { label: "HEDEF",    value: totalLeads,          color: "#34d399" },
     { label: "SEKTÖR",   value: sectorKeys.length,   color: "#60a5fa" },
     { label: "ANALİZ",   value: `${completedSects}/${sectorKeys.length}`, color: "#a78bfa" },
-    { label: "İLETŞİM",  value: stats.contacted,     color: "#38bdf8" },
-    { label: "KAZANLDI",  value: stats.won,            color: "#fbbf24" },
+    { label: "İLETŞM",  value: stats.contacted,     color: "#38bdf8" },
+    { label: "KAZANLD",  value: stats.won,            color: "#fbbf24" },
     { label: "NOT",      value: stats.totalNotes,    color: "#f472b6" },
   ];
 
