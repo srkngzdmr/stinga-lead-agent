@@ -434,15 +434,13 @@ export default function StingaLeadAgent() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
-            width: 46, height: 46, borderRadius: "50%",
-            border: "2.5px solid #fff",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.12)",
+            width: 52, height: 52, borderRadius: "50%",
+            border: "2.5px solid #e2e8f0",
+            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
             overflow: "hidden",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            background: "#000",
             flexShrink: 0
           }}>
-            <img src={STINGA_LOGO} alt="Stinga" style={{ width: 40, height: 40, objectFit: "contain" }} />
+            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           </div>
           <div>
             <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
@@ -1110,8 +1108,8 @@ export default function StingaLeadAgent() {
         fontSize: 11, color: "#94a3b8",
         display: "flex", alignItems: "center", justifyContent: "center", gap: 8
       }}>
-        <img src={STINGA_LOGO} alt="" style={{ width: 18, height: 18, borderRadius: "50%" }} />
-        Stinga Lead Agent v2.0 — AI destekli B2B müşteri araştırma platformu — Claude API ile güçlendirilmiştir
+        <img src={STINGA_LOGO} alt="" style={{ width: 22, height: 22, borderRadius: "50%", border: "1px solid #e2e8f0" }} />
+        Stinga Lead Agent v2.0 — AI destekli B2B müşteri araştırma platformu — Gemini AI ile güçlendirilmiştir
       </footer>
     </div>
   );
