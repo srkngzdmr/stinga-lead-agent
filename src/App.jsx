@@ -34,7 +34,7 @@ const callGemini = async (prompt, systemInstruction = "") => {
 // ─── Stinga Logo (GitHub raw — beyaz yuvarlak çerçeveli) ────
 const STINGA_LOGO_URL = "https://raw.githubusercontent.com/srkngzdmr/stinga-lead-agent/refs/heads/master/stinga_logo_ic_i_beyaz_c_erc_eveli-02.png";
 
-const StingaLogo = ({ size = 40 }) => {
+const StingaLogo = ({ size = 40, dark = false }) => {
   const [err, setErr] = React.useState(false);
   return err ? (
     <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -44,14 +44,19 @@ const StingaLogo = ({ size = 40 }) => {
       <circle cx="50" cy="50" r="6" fill="#10b981"/>
     </svg>
   ) : (
-    <div style={{ width: size, height: size, borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
-      <img
-        src={STINGA_LOGO_URL}
-        alt="Stinga"
-        onError={() => setErr(true)}
-        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-      />
-    </div>
+    <img
+      src={STINGA_LOGO_URL}
+      alt="Stinga"
+      onError={() => setErr(true)}
+      style={{
+        width: size,
+        height: size,
+        display: "block",
+        flexShrink: 0,
+        mixBlendMode: dark ? "screen" : "multiply",
+        objectFit: "contain",
+      }}
+    />
   );
 };
 
@@ -528,7 +533,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
 
           {/* SOL */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <StingaLogo size={42} />
+            <StingaLogo size={42} dark={true} />
             <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px 3px rgba(16,185,129,0.5)" }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
             <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.2</span>
@@ -563,7 +568,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
       {/* ── HEADER ── */}
       <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "9px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <StingaLogo size={52} />
+          <StingaLogo size={52} dark={false} />
           <div>
             <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Stinga Lead Agent</h1>
             <p style={{ fontSize: 10, color: "#64748b" }}>AI-Powered B2B Platform — Stinga Yapay Zeka</p>
@@ -940,7 +945,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
                   {/* Logo + karşılama */}
                   <div style={{ textAlign: "center", marginBottom: 20 }}>
                     <div className="float-anim" style={{ display: "inline-block", marginBottom: 10 }}>
-                      <StingaLogo size={56} />
+                      <StingaLogo size={56} dark={false} />
                     </div>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Stinga Yapay Zeka</h3>
                     <p style={{ fontSize: 12, color: "#64748b" }}>B2B Satış & Lead Asistanı — Size nasıl yardımcı olabilirim?</p>
