@@ -34,29 +34,61 @@ const callGemini = async (prompt, systemInstruction = "") => {
 // ─── Stinga Logo (GitHub raw — beyaz yuvarlak çerçeveli) ────
 const STINGA_LOGO_URL = "https://raw.githubusercontent.com/srkngzdmr/stinga-lead-agent/refs/heads/master/stinga_logo_ic_i_beyaz_c_erc_eveli-02.png";
 
-const StingaLogo = ({ size = 40, dark = false }) => {
+// ─── Banner Ajan İkonu (animasyonlu SVG robot) ───────────────
+const AjanIcon = ({ size = 42 }) => (
+  <svg width={size} height={size} viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg">
+    {/* Dış halka */}
+    <circle cx="40" cy="40" r="38" fill="rgba(16,185,129,0.08)" stroke="#10b981" strokeWidth="1.5"/>
+    {/* Kafa */}
+    <rect x="22" y="20" width="36" height="28" rx="6" fill="#0f172a" stroke="#10b981" strokeWidth="1.5"/>
+    {/* Gözler */}
+    <circle cx="32" cy="32" r="4" fill="#10b981" opacity="0.9"/>
+    <circle cx="48" cy="32" r="4" fill="#10b981" opacity="0.9"/>
+    {/* Göz parıltısı */}
+    <circle cx="33.5" cy="30.5" r="1.2" fill="#fff" opacity="0.7"/>
+    <circle cx="49.5" cy="30.5" r="1.2" fill="#fff" opacity="0.7"/>
+    {/* Ağız / data çizgisi */}
+    <rect x="29" y="40" width="22" height="2" rx="1" fill="#10b981" opacity="0.5"/>
+    <rect x="33" y="44" width="14" height="2" rx="1" fill="#10b981" opacity="0.3"/>
+    {/* Anten */}
+    <line x1="40" y1="20" x2="40" y2="12" stroke="#10b981" strokeWidth="1.5" strokeLinecap="round"/>
+    <circle cx="40" cy="10" r="3" fill="#10b981"/>
+    {/* Boyun */}
+    <rect x="36" y="48" width="8" height="5" rx="2" fill="#10b981" opacity="0.4"/>
+    {/* Gövde */}
+    <rect x="26" y="53" width="28" height="18" rx="5" fill="#0f172a" stroke="#10b981" strokeWidth="1.2"/>
+    {/* Gövde detaylar */}
+    <rect x="31" y="58" width="8" height="3" rx="1.5" fill="#10b981" opacity="0.5"/>
+    <rect x="41" y="58" width="8" height="3" rx="1.5" fill="#10b981" opacity="0.3"/>
+    <circle cx="40" cy="65" r="2.5" fill="#10b981" opacity="0.6"/>
+  </svg>
+);
+
+// ─── Stinga Logo (header için — siyah arka plan CSS trick ile yok) ───
+const StingaLogo = ({ size = 52 }) => {
   const [err, setErr] = React.useState(false);
   return err ? (
-    <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#10b981" strokeWidth="3"/>
-      <path d="M50 18 L62 38 L82 38 L66 52 L72 72 L50 60 L28 72 L34 52 L18 38 L38 38 Z"
-        fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinejoin="round"/>
-      <circle cx="50" cy="50" r="6" fill="#10b981"/>
-    </svg>
+    <AjanIcon size={size} />
   ) : (
-    <img
-      src={STINGA_LOGO_URL}
-      alt="Stinga"
-      onError={() => setErr(true)}
-      style={{
-        width: size,
-        height: size,
-        display: "block",
-        flexShrink: 0,
-        mixBlendMode: dark ? "screen" : "multiply",
-        objectFit: "contain",
-      }}
-    />
+    <div style={{
+      width: size, height: size, borderRadius: "50%",
+      overflow: "hidden", flexShrink: 0,
+      background: "white",
+      boxShadow: "0 0 0 2px #e2e8f0",
+    }}>
+      <img
+        src={STINGA_LOGO_URL}
+        alt="Stinga"
+        onError={() => setErr(true)}
+        style={{
+          width: "140%", height: "140%",
+          objectFit: "cover",
+          marginLeft: "-20%", marginTop: "-20%",
+          mixBlendMode: "multiply",
+          display: "block",
+        }}
+      />
+    </div>
   );
 };
 
@@ -533,7 +565,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
 
           {/* SOL */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <StingaLogo size={42} dark={true} />
+            <AjanIcon size={42} />
             <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px 3px rgba(16,185,129,0.5)" }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
             <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.2</span>
@@ -568,7 +600,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
       {/* ── HEADER ── */}
       <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "9px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <StingaLogo size={52} dark={false} />
+          <StingaLogo size={52} />
           <div>
             <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Stinga Lead Agent</h1>
             <p style={{ fontSize: 10, color: "#64748b" }}>AI-Powered B2B Platform — Stinga Yapay Zeka</p>
@@ -945,7 +977,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
                   {/* Logo + karşılama */}
                   <div style={{ textAlign: "center", marginBottom: 20 }}>
                     <div className="float-anim" style={{ display: "inline-block", marginBottom: 10 }}>
-                      <StingaLogo size={56} dark={false} />
+                      <StingaLogo size={56} />
                     </div>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Stinga Yapay Zeka</h3>
                     <p style={{ fontSize: 12, color: "#64748b" }}>B2B Satış & Lead Asistanı — Size nasıl yardımcı olabilirim?</p>
