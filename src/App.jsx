@@ -219,6 +219,12 @@ export default function StingaLeadAgent() {
   const [lastScanTime, setLastScanTime] = useState(null);
   const chatEndRef = useRef(null);
   const scanIntervalRef = useRef(null);
+  const [clock, setClock] = useState(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => setClock(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const totalLeads = Object.values(KNOWN_COMPANIES).reduce((sum, arr) => sum + arr.length, 0);
   const sectorKeys = Object.keys(SECTOR_QUERIES);
@@ -434,13 +440,14 @@ export default function StingaLeadAgent() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
-            width: 52, height: 52, borderRadius: "50%",
-            border: "2.5px solid #e2e8f0",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.08)",
+            width: 56, height: 56, borderRadius: "50%",
+            border: "2px solid #d1fae5",
+            boxShadow: "0 2px 8px rgba(16,185,129,0.15)",
             overflow: "hidden",
-            flexShrink: 0
+            flexShrink: 0,
+            background: "#fff"
           }}>
-            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.8)" }} />
           </div>
           <div>
             <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
@@ -451,7 +458,17 @@ export default function StingaLeadAgent() {
             </p>
           </div>
         </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap" }}>
+          <div style={{
+            background: "#f8fafc", border: "1px solid #e2e8f0",
+            padding: "6px 14px", borderRadius: 10, fontSize: 13, color: "#0f172a", fontWeight: 600,
+            fontFamily: "'JetBrains Mono', monospace", letterSpacing: "0.02em"
+          }}>
+            {clock.toLocaleDateString('tr-TR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+            <span style={{ marginLeft: 8, color: "#10b981" }}>
+              {clock.toLocaleTimeString('tr-TR')}
+            </span>
+          </div>
           {autoScanActive && (
             <div className="scan-active" style={{
               background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.25)",
