@@ -447,7 +447,7 @@ export default function StingaLeadAgent() {
             flexShrink: 0,
             background: "#fff"
           }}>
-            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(1.8)" }} />
+            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(2.3)" }} />
           </div>
           <div>
             <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
