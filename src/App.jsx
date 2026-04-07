@@ -31,6 +31,20 @@ const callGemini = async (prompt, systemInstruction = "") => {
   return data.result || "Yanıt alınamadı.";
 };
 
+// ─── Stinga Logo SVG (inline — GitHub CORS sorunu yok) ───────
+const StingaLogo = ({ size = 40 }) => (
+  <svg width={size} height={size} viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#10b981" strokeWidth="3"/>
+    <path d="M50 18 L62 38 L82 38 L66 52 L72 72 L50 60 L28 72 L34 52 L18 38 L38 38 Z"
+      fill="none" stroke="#10b981" strokeWidth="2.5" strokeLinejoin="round"/>
+    <path d="M50 28 L58 43 L74 43 L61 53 L66 68 L50 59 L34 68 L39 53 L26 43 L42 43 Z"
+      fill="#10b981" opacity="0.3"/>
+    <circle cx="50" cy="50" r="6" fill="#10b981"/>
+    <text x="50" y="90" textAnchor="middle" fill="#10b981" fontSize="11" fontWeight="700"
+      fontFamily="'JetBrains Mono', monospace" letterSpacing="1">STINGA</text>
+  </svg>
+);
+
 // ─── Stinga Bağlamı ─────────────────────────────────────────
 const STINGA_CONTEXT = `
 Stinga Enerji A.Ş. Hakkında:
@@ -462,8 +476,18 @@ Sadece JSON döndür, başka açıklama yapma.`;
         @keyframes radarSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
         @keyframes blinkDot{0%,100%{opacity:1}50%{opacity:0.2}}
         @keyframes bannerGlow{0%,100%{box-shadow:0 0 0 0 rgba(16,185,129,0.4)}50%{box-shadow:0 0 20px 4px rgba(16,185,129,0.15)}}
+        @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+        @keyframes scanLine{0%{top:-10%}100%{top:110%}}
+        @keyframes countUp{from{opacity:0;transform:scale(0.8)}to{opacity:1;transform:scale(1)}}
+        @keyframes slideRight{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
+        @keyframes typewriter{from{width:0}to{width:100%}}
+        @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+        @keyframes particleFloat{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(-60px) rotate(360deg);opacity:0}}
         .fade-up{animation:fadeUp 0.4s ease-out both}
         .pulse-anim{animation:pulse 1.5s ease-in-out infinite}
+        .float-anim{animation:floatY 3s ease-in-out infinite}
+        .count-up{animation:countUp 0.5s ease-out both}
+        .slide-right{animation:slideRight 0.4s ease-out both}
         .sector-card{transition:all 0.22s;border:1px solid #e2e8f0;cursor:pointer}
         .sector-card:hover{transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,0.08);border-color:#10b981}
         .tab-btn{transition:all 0.18s;border:none;cursor:pointer}
@@ -482,6 +506,9 @@ Sadece JSON döndür, başka açıklama yapma.`;
         .contact-card{background:#f8fafc;border:1px solid #e2e8f0;border-radius:10px;padding:11px 14px;margin-bottom:8px;transition:border-color 0.15s}
         .contact-card:hover{border-color:#10b981}
         .social-link{display:inline-flex;align-items:center;gap:4px;font-size:10px;padding:2px 8px;border-radius:10px;text-decoration:none;font-weight:600}
+        .hero-shimmer{background:linear-gradient(90deg,transparent,rgba(16,185,129,0.08),transparent);background-size:200% 100%;animation:shimmer 2.5s infinite}
+        .stat-card{transition:all 0.2s;cursor:default}
+        .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,0.07)}
       `}</style>
 
       {/* ── BANNER ── */}
@@ -491,15 +518,10 @@ Sadece JSON döndür, başka açıklama yapma.`;
 
           {/* SOL */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <svg viewBox="0 0 28 28" width="28" height="28" style={{ flexShrink: 0 }}>
-              <circle cx="14" cy="14" r="12" stroke="rgba(16,185,129,0.15)" strokeWidth="1.5" fill="none" />
-              <circle cx="14" cy="14" r="7" stroke="rgba(16,185,129,0.25)" strokeWidth="1" fill="none" />
-              <circle cx="14" cy="14" r="3" fill="#10b981" />
-              <g className="radar"><path d="M14 14 L14 2" stroke="rgba(16,185,129,0.6)" strokeWidth="2" strokeLinecap="round" /></g>
-            </svg>
+            <StingaLogo size={36} />
             <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px 3px rgba(16,185,129,0.5)" }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
-            <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.1</span>
+            <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.2</span>
             {apiStatus === "loading" && <span style={{ fontSize: 11, color: "#fbbf24", fontWeight: 700 }}>◉ AI</span>}
             {apiStatus === "ok"      && <span style={{ fontSize: 11, color: "#10b981", fontWeight: 700 }}>✓ OK</span>}
             {apiStatus === "error"   && <span title={apiError} style={{ fontSize: 11, color: "#f87171", fontWeight: 700, cursor: "help" }}>✕ ERR</span>}
@@ -531,9 +553,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
       {/* ── HEADER ── */}
       <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "9px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "2px solid rgba(16,185,129,0.4)", background: "linear-gradient(135deg,#0f172a,#1e3a2f)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <span style={{ fontSize: 18 }}>⚡</span>
-          </div>
+          <StingaLogo size={44} />
           <div>
             <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Stinga Lead Agent</h1>
             <p style={{ fontSize: 10, color: "#64748b" }}>AI-Powered B2B Platform — Stinga Yapay Zeka</p>
@@ -579,23 +599,68 @@ Sadece JSON döndür, başka açıklama yapma.`;
         {activeTab === "dashboard" && (
           <div className="fade-up">
 
-            {/* Hedef Sektör Kartı */}
-            <div style={{ background: "linear-gradient(135deg,#ecfdf5,#f0f9ff)", border: "1px solid #d1fae5", borderRadius: 14, padding: 18, marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
-              <div style={{ flex: 1, minWidth: 240 }}>
-                <h2 style={{ fontSize: 17, fontWeight: 700, marginBottom: 5, color: "#0f172a" }}>🎯 Stinga Enerji — Hedef Sektör Analizi</h2>
-                <p style={{ fontSize: 12, color: "#475569", lineHeight: 1.6, maxWidth: 560 }}>Emisyonsuz yanma, kömür kurutma, arıtma çamuru bertarafı ve aktif karbon teknolojileriniz için en uygun potansiyel müşterileri <strong>Stinga Yapay Zeka</strong> ile bulun.</p>
-                {lastScanTime && <p style={{ fontSize: 10, color: "#94a3b8", marginTop: 5 }}>Son tarama: {lastScanTime}</p>}
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: 7 }}>
-                <button className="action-btn" onClick={() => { setAutoScanActive(true); setAutoScanSector(0); setScanProgress(0); addLog("🚀 Otomatik tarama başlatıldı..."); }} disabled={autoScanActive} style={{ background: autoScanActive ? "#94a3b8" : "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontSize: 12, fontWeight: 700, opacity: autoScanActive ? 0.6 : 1 }}>
-                  {autoScanActive ? `⏳ Taranıyor... %${scanProgress}` : "🚀 Tüm Sektörleri Tara"}
-                </button>
-                {autoScanActive && (
-                  <div style={{ height: 4, background: "#e2e8f0", borderRadius: 2, overflow: "hidden" }}>
-                    <div style={{ height: "100%", width: `${scanProgress}%`, background: "linear-gradient(90deg,#10b981,#059669)", borderRadius: 2, transition: "width 0.5s" }} />
+            {/* ── HERO ── */}
+            <div style={{ background: "linear-gradient(135deg,#0f172a 0%,#1e3a2f 60%,#0f172a 100%)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 18, padding: "28px 28px 24px", marginBottom: 16, position: "relative", overflow: "hidden" }}>
+              {/* Arka plan grid */}
+              <div style={{ position: "absolute", inset: 0, backgroundImage: "linear-gradient(rgba(16,185,129,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,0.04) 1px,transparent 1px)", backgroundSize: "28px 28px", pointerEvents: "none" }} />
+              {/* Scan line animasyonu */}
+              <div className="hero-shimmer" style={{ position: "absolute", inset: 0, pointerEvents: "none" }} />
+              {/* Hareketli parçacıklar */}
+              {[...Array(6)].map((_, i) => (
+                <div key={i} style={{ position: "absolute", width: 4, height: 4, borderRadius: "50%", background: "#10b981", opacity: 0.4, left: `${15 + i * 14}%`, bottom: "10%", animation: `particleFloat ${2 + i * 0.4}s ease-out infinite`, animationDelay: `${i * 0.5}s` }} />
+              ))}
+              <div style={{ position: "relative", zIndex: 1, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 20 }}>
+                <div style={{ flex: 1, minWidth: 260 }}>
+                  <div className="slide-right" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+                    <div style={{ background: "rgba(16,185,129,0.15)", border: "1px solid rgba(16,185,129,0.3)", borderRadius: 8, padding: "4px 10px", fontSize: 10, color: "#10b981", fontWeight: 700, fontFamily: "'JetBrains Mono',monospace", letterSpacing: "0.1em" }}>
+                      ◉ AJAN AKTİF — {clock.toLocaleTimeString("tr-TR")}
+                    </div>
                   </div>
-                )}
+                  <h2 className="slide-right" style={{ fontSize: 22, fontWeight: 800, color: "#fff", marginBottom: 8, lineHeight: 1.3, animationDelay: "0.05s" }}>
+                    Merhaba, ben <span style={{ color: "#10b981" }}>Stinga Yapay Zeka</span> 👋
+                  </h2>
+                  <p className="slide-right" style={{ fontSize: 13, color: "rgba(255,255,255,0.65)", lineHeight: 1.7, maxWidth: 520, animationDelay: "0.1s" }}>
+                    Stinga Enerji'nin B2B satış ajanıyım. Emisyonsuz yanma, kömür kurutma ve arıtma çamuru bertarafı teknolojileriniz için <strong style={{ color: "#34d399" }}>{totalLeads} potansiyel müşteri</strong> ve <strong style={{ color: "#60a5fa" }}>{sectorKeys.length} hedef sektörü</strong> sizin için analiz ediyorum.
+                  </p>
+                  {lastScanTime && <p style={{ fontSize: 10, color: "rgba(255,255,255,0.3)", marginTop: 8, fontFamily: "'JetBrains Mono',monospace" }}>Son tarama: {lastScanTime}</p>}
+                  <div className="slide-right" style={{ display: "flex", gap: 8, marginTop: 16, flexWrap: "wrap", animationDelay: "0.15s" }}>
+                    <button className="action-btn" onClick={() => { setAutoScanActive(true); setAutoScanSector(0); setScanProgress(0); addLog("🚀 Otomatik tarama başlatıldı..."); }} disabled={autoScanActive}
+                      style={{ background: autoScanActive ? "rgba(148,163,184,0.2)" : "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: autoScanActive ? "1px solid rgba(255,255,255,0.15)" : "none", borderRadius: 10, padding: "10px 20px", fontSize: 12, fontWeight: 700, opacity: autoScanActive ? 0.7 : 1 }}>
+                      {autoScanActive ? `⏳ Taranıyor... %${scanProgress}` : "🚀 Tüm Sektörleri Tara"}
+                    </button>
+                    <button className="action-btn" onClick={() => setActiveTab("chat")}
+                      style={{ background: "rgba(99,102,241,0.15)", color: "#a5b4fc", border: "1px solid rgba(99,102,241,0.3)", borderRadius: 10, padding: "10px 20px", fontSize: 12, fontWeight: 700 }}>
+                      💬 Soru Sor
+                    </button>
+                    <button className="action-btn" onClick={() => setActiveTab("leads")}
+                      style={{ background: "rgba(255,255,255,0.06)", color: "rgba(255,255,255,0.7)", border: "1px solid rgba(255,255,255,0.12)", borderRadius: 10, padding: "10px 20px", fontSize: 12, fontWeight: 700 }}>
+                      📋 Lead Listesi
+                    </button>
+                  </div>
+                </div>
+                {/* Sağ — canlı metrikler */}
+                <div className="float-anim" style={{ display: "flex", flexDirection: "column", gap: 8, minWidth: 160 }}>
+                  {[
+                    { label: "Aktif Lead", value: totalLeads, color: "#34d399", icon: "🎯" },
+                    { label: "Hedef Sektör", value: sectorKeys.length, color: "#60a5fa", icon: "📊" },
+                    { label: "Analiz Tamam", value: `${completedSects}/${sectorKeys.length}`, color: "#a78bfa", icon: "✅" },
+                    { label: "Toplam Not", value: stats.totalNotes, color: "#f472b6", icon: "📓" },
+                  ].map((m, i) => (
+                    <div key={i} style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", borderRadius: 10, padding: "8px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
+                        <span style={{ fontSize: 14 }}>{m.icon}</span>
+                        <span style={{ fontSize: 10, color: "rgba(255,255,255,0.45)", fontWeight: 600 }}>{m.label}</span>
+                      </div>
+                      <span style={{ fontSize: 16, fontWeight: 800, color: m.color, fontFamily: "'JetBrains Mono',monospace" }}>{m.value}</span>
+                    </div>
+                  ))}
+                </div>
               </div>
+              {autoScanActive && (
+                <div style={{ position: "relative", zIndex: 1, marginTop: 16, height: 4, background: "rgba(255,255,255,0.1)", borderRadius: 2, overflow: "hidden" }}>
+                  <div style={{ height: "100%", width: `${scanProgress}%`, background: "linear-gradient(90deg,#10b981,#34d399)", borderRadius: 2, transition: "width 0.5s", boxShadow: "0 0 8px rgba(16,185,129,0.6)" }} />
+                </div>
+              )}
             </div>
 
             {/* Stats */}
@@ -610,7 +675,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
                 { label: "Notlu Firma",      value: stats.withNotes,  color: "#db2777", bg: "rgba(244,114,182,0.06)" },
                 { label: "Toplam Not",       value: stats.totalNotes, color: "#9333ea", bg: "rgba(147,51,234,0.06)" },
               ].map((s, i) => (
-                <div key={i} style={{ background: s.bg, border: "1px solid #e2e8f0", borderRadius: 11, padding: "12px 14px", textAlign: "center" }}>
+                <div key={i} className="stat-card count-up" style={{ background: s.bg, border: "1px solid #e2e8f0", borderRadius: 11, padding: "12px 14px", textAlign: "center", animationDelay: `${i * 0.06}s` }}>
                   <div style={{ fontSize: 22, fontWeight: 700, color: s.color }}>{s.value}</div>
                   <div style={{ fontSize: 10, color: "#64748b", fontWeight: 600, marginTop: 2 }}>{s.label}</div>
                 </div>
@@ -861,12 +926,37 @@ Sadece JSON döndür, başka açıklama yapma.`;
           <div className="fade-up" style={{ display: "flex", flexDirection: "column", height: "calc(100vh - 200px)", minHeight: 400 }}>
             <div style={{ flex: 1, overflowY: "auto", background: "#fff", border: "1px solid #e2e8f0", borderRadius: 13, padding: 16, marginBottom: 11 }}>
               {chatMessages.length === 0 && (
-                <div style={{ textAlign: "center", padding: 40, color: "#94a3b8" }}>
-                  <p style={{ fontSize: 28, marginBottom: 10 }}>🤖</p>
-                  <p style={{ fontSize: 13, color: "#64748b" }}>Stinga Yapay Zeka hazır. Soru sorun!</p>
-                  <div style={{ display: "flex", gap: 7, justifyContent: "center", marginTop: 14, flexWrap: "wrap" }}>
-                    {["Hangi sektör en acil?", "İSKİ'ye nasıl yaklaşalım?", "Çimento sektörü satış stratejisi?"].map(q => (
-                      <button key={q} onClick={() => { setChatInput(q); }} style={{ background: "#f0f9ff", border: "1px solid #bfdbfe", color: "#2563eb", borderRadius: 20, padding: "5px 12px", fontSize: 11, cursor: "pointer", fontWeight: 600 }}>{q}</button>
+                <div style={{ padding: "20px 10px" }}>
+                  {/* Logo + karşılama */}
+                  <div style={{ textAlign: "center", marginBottom: 20 }}>
+                    <div className="float-anim" style={{ display: "inline-block", marginBottom: 10 }}>
+                      <StingaLogo size={56} />
+                    </div>
+                    <h3 style={{ fontSize: 16, fontWeight: 700, color: "#0f172a", marginBottom: 4 }}>Stinga Yapay Zeka</h3>
+                    <p style={{ fontSize: 12, color: "#64748b" }}>B2B Satış & Lead Asistanı — Size nasıl yardımcı olabilirim?</p>
+                  </div>
+                  {/* Hazır sorular grid */}
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+                    {[
+                      { q: "Hangi sektör en acil ve öncelikli?", icon: "🎯" },
+                      { q: "İSKİ ile nasıl iletişim kuralım?", icon: "📞" },
+                      { q: "Çimento sektörü satış stratejisi nedir?", icon: "🏗️" },
+                      { q: "AB SKDM'ye uyum için hangi firmalar hedeflenmeli?", icon: "🌿" },
+                      { q: "Tavuk çiftliklerine nasıl yaklaşalım?", icon: "🐔" },
+                      { q: "Kömür sektöründeki en büyük fırsatlar neler?", icon: "⛏️" },
+                      { q: "Stinga'nın en güçlü rekabet avantajları neler?", icon: "💪" },
+                      { q: "İlk soğuk e-posta taslağı yazar mısın?", icon: "✉️" },
+                      { q: "Belediyelerle ihale sürecinde ne yapmalıyız?", icon: "🏛️" },
+                      { q: "Demir-çelik sektörüne teknik sunum hazırla", icon: "🔩" },
+                      { q: "Hangi firma en hızlı kazanılabilir lead?", icon: "🏆" },
+                      { q: "Tekstil firmaları için fiyat stratejisi öner", icon: "🧵" },
+                    ].map(({ q, icon }) => (
+                      <button key={q} onClick={() => { setChatInput(q); }} style={{ background: "#f8fafc", border: "1px solid #e2e8f0", color: "#374151", borderRadius: 10, padding: "10px 12px", fontSize: 11, cursor: "pointer", fontWeight: 500, textAlign: "left", display: "flex", alignItems: "center", gap: 8, transition: "all 0.15s" }}
+                        onMouseEnter={e => { e.currentTarget.style.borderColor = "#10b981"; e.currentTarget.style.background = "#f0fdf4"; }}
+                        onMouseLeave={e => { e.currentTarget.style.borderColor = "#e2e8f0"; e.currentTarget.style.background = "#f8fafc"; }}>
+                        <span style={{ fontSize: 16, flexShrink: 0 }}>{icon}</span>
+                        <span>{q}</span>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -885,16 +975,17 @@ Sadece JSON döndür, başka açıklama yapma.`;
               )}
               <div ref={chatEndRef} />
             </div>
-            <div style={{ display: "flex", gap: 8 }}>
-              <input
+            <div style={{ display: "flex", gap: 8, alignItems: "flex-end" }}>
+              <textarea
                 value={chatInput}
                 onChange={e => setChatInput(e.target.value)}
-                onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleChat()}
-                placeholder="Stinga Yapay Zeka'ya sorun... (Enter ile gönder)"
-                style={{ flex: 1, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 14px", fontSize: 13 }}
+                onKeyDown={e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); handleChat(); } }}
+                placeholder="Stinga Yapay Zeka'ya sorun... (Enter gönderir, Shift+Enter yeni satır)"
+                rows={2}
+                style={{ flex: 1, background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "10px 14px", fontSize: 13, resize: "none", fontFamily: "inherit", lineHeight: 1.5 }}
               />
-              <button className="action-btn" onClick={handleChat} disabled={isChatLoading} style={{ background: "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 20px", fontSize: 13, fontWeight: 700, opacity: isChatLoading ? 0.6 : 1 }}>
-                Gönder
+              <button className="action-btn" onClick={handleChat} disabled={isChatLoading || !chatInput.trim()} style={{ background: isChatLoading ? "#94a3b8" : "linear-gradient(135deg,#10b981,#059669)", color: "#fff", border: "none", borderRadius: 10, padding: "12px 20px", fontSize: 13, fontWeight: 700, opacity: (isChatLoading || !chatInput.trim()) ? 0.6 : 1, whiteSpace: "nowrap", height: 48 }}>
+                {isChatLoading ? "⏳" : "Gönder ↑"}
               </button>
             </div>
           </div>
