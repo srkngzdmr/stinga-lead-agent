@@ -8,17 +8,16 @@ import { useState, useEffect, useRef, useCallback } from "react";
 // - AI ile iletişim kişisi + sosyal medya araması
 // ============================================================
 
-// ─── Gemini Proxy Çağrısı (Railway /api/gemini) ─────────────
-// API key Railway'de environment variable olarak tanımlı.
-// Frontend doğrudan Gemini'ye değil, kendi Flask backend'ine gider.
+// ─── Gemini Proxy Çağrısı (Railway /api/ai-search) ──────────
+// server.js'deki endpoint: POST /api/ai-search
+// Response: { success: true, result: "..." }
 const callGemini = async (prompt, systemInstruction = "") => {
-  const res = await fetch("/api/gemini", {
+  const res = await fetch("/api/ai-search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      model: "gemini-2.5-flash-preview-05-20",
-      system: systemInstruction,
       prompt,
+      systemPrompt: systemInstruction,
     }),
   });
   if (!res.ok) {
@@ -26,11 +25,10 @@ const callGemini = async (prompt, systemInstruction = "") => {
     throw new Error(`Sunucu hatası ${res.status}: ${err.slice(0, 200)}`);
   }
   const data = await res.json();
-  return (
-    data.text ||
-    data.candidates?.[0]?.content?.parts?.[0]?.text ||
-    "Yanıt alınamadı."
-  );
+  if (!data.success) {
+    throw new Error(data.error || "Gemini API hatası");
+  }
+  return data.result || "Yanıt alınamadı.";
 };
 
 // ─── Stinga Bağlamı ─────────────────────────────────────────
