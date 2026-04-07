@@ -260,24 +260,76 @@ const KNOWN_COMPANIES = {
   ],
 };
 
-// ─── EXCEL EXPORT ────────────────────────────────────────────
-const exportToExcel = (companies, leadStatuses, noteEntries) => {
+// ─── EXCEL EXPORT (gerçek .xlsx — SheetJS) ──────────────────
+const exportToExcel = async (companies, leadStatuses, noteEntries) => {
+  // SheetJS CDN'den yükle
+  if (!window.XLSX) {
+    await new Promise((resolve, reject) => {
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js";
+      s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  const XLSX = window.XLSX;
+
+  const header = ["#", "Firma Adı", "Sektör", "Şehir", "Telefon", "E-Posta", "Website", "LinkedIn", "Stinga İhtiyacı", "Firma Notu", "Lead Durumu", "Notlar"];
   const rows = companies.map((c, i) => [
-    i + 1, c.name, c.sectorLabel || c.sector, c.city || "",
-    c.phone || "", c.email || "", c.website || "", c.linkedin || "",
-    c.need, c.note,
+    i + 1,
+    c.name,
+    c.sectorLabel || c.sector,
+    c.city || "",
+    c.phone || "",
+    c.email || "",
+    c.website || "",
+    c.linkedin || "",
+    c.need,
+    c.note,
     LEAD_STATUSES[leadStatuses[c.name] || "new"]?.label || "Yeni",
     (noteEntries[c.name] || []).map(n => n.text).join(" | "),
   ]);
 
-  const header = ["#","Firma Adı","Sektör","Şehir","Telefon","E-Posta","Website","LinkedIn","Stinga İhtiyacı","Firma Notu","Lead Durumu","Notlar"];
-  const csv = [header, ...rows].map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(",")).join("\n");
-  const bom = "\uFEFF";
-  const blob = new Blob([bom + csv], { type: "text/csv;charset=utf-8;" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url; a.download = `stinga-leads-${new Date().toISOString().slice(0,10)}.csv`;
-  a.click(); URL.revokeObjectURL(url);
+  const ws = XLSX.utils.aoa_to_sheet([header, ...rows]);
+
+  // Sütun genişlikleri
+  ws["!cols"] = [
+    { wch: 4 },   // #
+    { wch: 40 },  // Firma
+    { wch: 28 },  // Sektör
+    { wch: 14 },  // Şehir
+    { wch: 18 },  // Telefon
+    { wch: 28 },  // E-Posta
+    { wch: 24 },  // Website
+    { wch: 32 },  // LinkedIn
+    { wch: 36 },  // İhtiyaç
+    { wch: 50 },  // Not
+    { wch: 18 },  // Durum
+    { wch: 40 },  // Notlar
+  ];
+
+  // Header satırı stil (sadece SheetJS Pro destekler ama range tanımı çalışır)
+  ws["!freeze"] = { xSplit: 0, ySplit: 1 }; // üst satırı dondur
+
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, "Stinga Leads");
+
+  // Özet sayfası ekle
+  const summaryData = [
+    ["Stinga Enerji A.Ş. — Lead Raporu"],
+    ["Oluşturma Tarihi", new Date().toLocaleDateString("tr-TR")],
+    ["Toplam Firma", companies.length],
+    [],
+    ["Durum", "Firma Sayısı"],
+    ...Object.entries(LEAD_STATUSES).map(([k, v]) => [
+      v.label,
+      companies.filter(c => (leadStatuses[c.name] || "new") === k).length
+    ]),
+  ];
+  const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+  wsSummary["!cols"] = [{ wch: 24 }, { wch: 16 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, "Özet");
+
+  XLSX.writeFile(wb, `stinga-leads-${new Date().toISOString().slice(0, 10)}.xlsx`);
 };
 
 // ─── PDF EXPORT ──────────────────────────────────────────────
@@ -333,13 +385,13 @@ ${company.note}
 
 AB SKDM (Sınırda Karbon Düzenleme Mekanizması) kapsamında 2026 itibarıyla karbon vergisi yükümlülüğü başlamadan önce emisyon değerlerinizi düşürmeniz kritik önem taşımaktadır. Stinga teknolojisi bu süreçte size doğrulanabilir karbon azaltımı ve maliyet tasarrufu sağlayacaktır.
 
-Sizi bilgilendirmek ve teknik detayları paylaşmak adına 20 dakikalık bir online görüşme talep edebilir miyiz?
+Sizi bilgilendirmek ve teknik detayları yerinde paylaşmak adına tesislerinizi ziyaret etmek istiyoruz. Size uygun bir tarih ve saat belirleyebilir miyiz?
 
 Saygılarımla,
 Stinga Enerji A.Ş. — Satış & İş Geliştirme
 📞 +90 212 872 23 57
 ✉️ info@stinga.biz
-🌐 www.stinga.biz`;
+🌐 www.stingaenerji.com`;
 
 
 const LS = {
@@ -1154,7 +1206,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
               <div style={{ display: "flex", gap: 8 }}>
                 <button className="action-btn" onClick={() => exportToExcel(Object.entries(KNOWN_COMPANIES).flatMap(([sec,cs])=>cs.map(c=>({...c,sectorLabel:sec}))), leadStatuses, noteEntries)}
                   style={{ background: "linear-gradient(135deg,#059669,#047857)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
-                  📊 Excel İndir (CSV)
+                  📊 Excel İndir (.xlsx)
                 </button>
                 <button className="action-btn" onClick={() => exportToPDF(Object.entries(KNOWN_COMPANIES).flatMap(([sec,cs])=>cs.map(c=>({...c,sectorLabel:sec}))), leadStatuses)}
                   style={{ background: "linear-gradient(135deg,#dc2626,#b91c1c)", color: "#fff", border: "none", borderRadius: 10, padding: "10px 18px", fontSize: 12, fontWeight: 700 }}>
