@@ -7,7 +7,6 @@ import { fileURLToPath } from 'url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const PORT = process.env.PORT || 3000;
 const isProd = process.env.NODE_ENV === 'production';
-
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY || '';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY || '';
 
@@ -21,6 +20,8 @@ app.post('/api/ai-search', async (req, res) => {
   try {
     // Try Gemini first if key exists
     if ((provider === 'gemini' || !provider) && GEMINI_API_KEY) {
+      console.log('[Gemini] Sending request...');
+      
       const geminiRes = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
         {
@@ -33,19 +34,43 @@ app.post('/api/ai-search', async (req, res) => {
           })
         }
       );
+
       const data = await geminiRes.json();
-      const text = data?.candidates?.[0]?.content?.parts
-        ?.filter(p => p.text)
-        ?.map(p => p.text)
-        ?.join('\n') || '';
+
+      // Log for debugging
+      if (data.error) {
+        console.error('[Gemini] API Error:', JSON.stringify(data.error));
+      }
+
+      // Extract text from all possible response formats
+      let text = '';
+      
+      if (data?.candidates?.[0]?.content?.parts) {
+        const parts = data.candidates[0].content.parts;
+        
+        // Collect text from all parts that have text content
+        const textParts = [];
+        for (const part of parts) {
+          if (part.text) {
+            textParts.push(part.text);
+          }
+        }
+        text = textParts.join('\n');
+      }
 
       if (text) {
+        console.log('[Gemini] Success, response length:', text.length);
         return res.json({ success: true, provider: 'gemini', result: text });
+      } else {
+        console.log('[Gemini] Empty response. Full data:', JSON.stringify(data).substring(0, 500));
+        // Don't return yet — fall through to Claude
       }
     }
 
     // Fallback to Claude
     if (ANTHROPIC_API_KEY) {
+      console.log('[Claude] Sending request...');
+      
       const claudeRes = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: {
@@ -61,19 +86,34 @@ app.post('/api/ai-search', async (req, res) => {
           tools: [{ type: 'web_search_20250305', name: 'web_search' }]
         })
       });
+
       const data = await claudeRes.json();
+
+      if (data.error) {
+        console.error('[Claude] API Error:', JSON.stringify(data.error));
+        return res.json({ success: false, error: data.error.message || 'Claude API hatası' });
+      }
+
       const text = data.content
         ?.filter(b => b.type === 'text')
         ?.map(b => b.text)
         ?.join('\n') || '';
 
-      return res.json({ success: true, provider: 'claude', result: text });
+      if (text) {
+        console.log('[Claude] Success, response length:', text.length);
+        return res.json({ success: true, provider: 'claude', result: text });
+      } else {
+        console.log('[Claude] Empty response. Full data:', JSON.stringify(data).substring(0, 500));
+        return res.json({ success: false, error: 'Claude boş yanıt döndü.' });
+      }
     }
 
-    return res.json({ success: false, error: 'No API key configured. Set ANTHROPIC_API_KEY or GEMINI_API_KEY.' });
-
+    return res.json({ 
+      success: false, 
+      error: 'API anahtarı yapılandırılmamış. ANTHROPIC_API_KEY veya GEMINI_API_KEY ayarlayın.' 
+    });
   } catch (err) {
-    console.error('AI API Error:', err);
+    console.error('[API] Error:', err.message);
     return res.status(500).json({ success: false, error: err.message });
   }
 });
@@ -90,7 +130,6 @@ app.get('/api/health', (req, res) => {
 
 // ============ SERVE FRONTEND ============
 if (isProd) {
-  // Production: serve built files
   app.use(express.static(path.join(__dirname, 'dist')));
   app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
@@ -102,7 +141,6 @@ if (isProd) {
     console.log(`   Claude: ${ANTHROPIC_API_KEY ? '✅ configured' : '❌ not set'}`);
   });
 } else {
-  // Development: Vite dev server middleware
   const vite = await createServer({
     server: { middlewareMode: true },
     appType: 'spa'
