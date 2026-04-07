@@ -186,7 +186,7 @@ const KNOWN_COMPANIES = {
   ]
 };
 
-const API_URL = "https://api.anthropic.com/v1/messages";
+const API_URL = "/api/ai-search";
 
 // Lead status options
 const LEAD_STATUSES = {
@@ -260,15 +260,15 @@ export default function StingaLeadAgent() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          model: "claude-sonnet-4-20250514",
-          max_tokens: 1000,
-          system: systemPrompt || "Sen bir B2B satış araştırma uzmanısın. Türkçe yanıt ver.",
-          messages: [{ role: "user", content: prompt }],
-          tools: [{ type: "web_search_20250305", name: "web_search" }]
+          prompt,
+          systemPrompt: systemPrompt || "Sen bir B2B satış araştırma uzmanısın. Türkçe yanıt ver."
         })
       });
       const data = await response.json();
-      return data.content?.filter(b => b.type === "text").map(b => b.text).join("\n") || "Sonuç alınamadı.";
+      if (data.success) {
+        return data.result || "Sonuç alınamadı.";
+      }
+      return "Hata: " + (data.error || "Bilinmeyen bir hata oluştu.");
     } catch (err) {
       console.error("API Error:", err);
       return "API hatası: " + err.message;
