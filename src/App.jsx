@@ -10,7 +10,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 // ⚠️ Buraya kendi Gemini API anahtarınızı girin
 const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY_HERE";
-const GEMINI_MODEL   = "gemini-2.5-flash-preview-05-20";
+const GEMINI_MODEL   = "gemini-2.0-flash";
 
 // ─── Gemini Doğrudan API Çağrısı ────────────────────────────
 const callGemini = async (prompt, systemInstruction = "") => {
@@ -274,16 +274,35 @@ export default function StingaLeadAgent() {
   // Gemini çağrısı — aktif API key kullanır
   const gemini = useCallback(async (prompt, system = "") => {
     const key = activeApiKey || GEMINI_API_KEY;
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent?key=${key}`;
-    const body = {
-      contents: [{ role: "user", parts: [{ text: prompt }] }],
-      ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
-      generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
-    };
-    const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
-    if (!res.ok) { const e = await res.text(); throw new Error(`Gemini ${res.status}: ${e.slice(0, 200)}`); }
-    const data = await res.json();
-    return data?.candidates?.[0]?.content?.parts?.[0]?.text || "Yanıt alınamadı.";
+    if (!key || key === "YOUR_GEMINI_API_KEY_HERE") {
+      throw new Error("API anahtarı girilmedi. Header'daki 'API KEY' alanına Gemini anahtarınızı girin.");
+    }
+    // Model sıralaması: önce 2.0-flash, hata alırsa 1.5-flash
+    const models = ["gemini-2.0-flash", "gemini-1.5-flash"];
+    let lastErr = null;
+    for (const model of models) {
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`;
+      const body = {
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        ...(system ? { systemInstruction: { parts: [{ text: system }] } } : {}),
+        generationConfig: { temperature: 0.7, maxOutputTokens: 2048 },
+      };
+      try {
+        const res = await fetch(url, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+        if (!res.ok) {
+          const e = await res.text();
+          lastErr = new Error(`${model} → ${res.status}: ${e.slice(0, 150)}`);
+          continue; // sonraki modeli dene
+        }
+        const data = await res.json();
+        const text = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!text) throw new Error("Boş yanıt");
+        return text;
+      } catch (err) {
+        lastErr = err;
+      }
+    }
+    throw lastErr || new Error("Tüm modeller başarısız oldu");
   }, [activeApiKey]);
 
   // ─── Auto-scan ──────────────────────────────────────────────
@@ -550,7 +569,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
       {/* ── HEADER ── */}
       <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "9px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "2px solid #e2e8f0", overflow: "hidden", background: "#0f172a", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "2px solid rgba(16,185,129,0.4)", background: "linear-gradient(135deg,#0f172a,#1e3a2f)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <span style={{ fontSize: 18 }}>⚡</span>
           </div>
           <div>
@@ -566,11 +585,11 @@ Sadece JSON döndür, başka açıklama yapma.`;
               value={apiKeyInput}
               onChange={e => setApiKeyInput(e.target.value)}
               onBlur={() => { if (apiKeyInput.trim()) { setActiveApiKey(apiKeyInput.trim()); addLog("🔑 API anahtarı güncellendi"); } }}
-              placeholder="AIza..."
-              type="password"
-              style={{ width: 120, background: "transparent", border: "none", fontSize: 10, outline: "none", color: "#0f172a" }}
+              onKeyDown={e => { if (e.key === "Enter" && apiKeyInput.trim()) { setActiveApiKey(apiKeyInput.trim()); addLog("🔑 API anahtarı güncellendi"); } }}
+              placeholder="AIza... girin"
+              style={{ width: 130, background: "transparent", border: "none", fontSize: 10, outline: "none", color: "#0f172a", letterSpacing: apiKeyInput ? "0.08em" : "normal" }}
             />
-            {activeApiKey && activeApiKey !== GEMINI_API_KEY && <span style={{ fontSize: 8, color: "#10b981", fontWeight: 700 }}>✓</span>}
+            {activeApiKey && activeApiKey !== GEMINI_API_KEY && <span style={{ fontSize: 8, color: "#10b981", fontWeight: 700 }}>✓ AKTİF</span>}
           </div>
           <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", padding: "3px 9px", borderRadius: 7, fontSize: 10, fontFamily: "'JetBrains Mono',monospace" }}>
             {clock.toLocaleDateString("tr-TR", { weekday: "short", year: "numeric", month: "short", day: "numeric" })}
@@ -610,6 +629,18 @@ Sadece JSON döndür, başka açıklama yapma.`;
         {/* DASHBOARD */}
         {activeTab === "dashboard" && (
           <div className="fade-up">
+
+            {/* API Key Uyarısı */}
+            {(!activeApiKey || activeApiKey === "YOUR_GEMINI_API_KEY_HERE") && (
+              <div style={{ background: "linear-gradient(135deg,#fff7ed,#fef3c7)", border: "1px solid #fde68a", borderRadius: 12, padding: "12px 16px", marginBottom: 14, display: "flex", alignItems: "center", gap: 10 }}>
+                <span style={{ fontSize: 20 }}>🔑</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 700, color: "#92400e" }}>Gemini API Anahtarı Gerekli</div>
+                  <div style={{ fontSize: 11, color: "#78350f", marginTop: 2 }}>Yukarıdaki <strong>API KEY</strong> alanına Google AI Studio'dan aldığınız anahtarı girin. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer" style={{ color: "#b45309", fontWeight: 700 }}>aistudio.google.com/apikey</a> adresinden ücretsiz alabilirsiniz.</div>
+                </div>
+              </div>
+            )}
+
             <div style={{ background: "linear-gradient(135deg,#ecfdf5,#f0f9ff)", border: "1px solid #d1fae5", borderRadius: 14, padding: 18, marginBottom: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 12 }}>
               <div style={{ flex: 1, minWidth: 240 }}>
                 <h2 style={{ fontSize: 17, fontWeight: 700, marginBottom: 5, color: "#0f172a" }}>🎯 Stinga Enerji — Hedef Sektör Analizi</h2>
