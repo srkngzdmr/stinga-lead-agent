@@ -440,14 +440,19 @@ export default function StingaLeadAgent() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <div style={{
-            width: 56, height: 56, borderRadius: "50%",
-            border: "2px solid #d1fae5",
-            boxShadow: "0 2px 8px rgba(16,185,129,0.15)",
+            width: 60, height: 60, borderRadius: "50%",
+            border: "2.5px solid #fff",
+            boxShadow: "0 2px 10px rgba(0,0,0,0.12)",
             overflow: "hidden",
             flexShrink: 0,
+            position: "relative",
             background: "#fff"
           }}>
-            <img src={STINGA_LOGO} alt="Stinga" style={{ width: "100%", height: "100%", objectFit: "cover", transform: "scale(2.3)" }} />
+            <img src={STINGA_LOGO} alt="Stinga" style={{
+              position: "absolute", inset: -30,
+              width: 120, height: 120,
+              objectFit: "contain"
+            }} />
           </div>
           <div>
             <h1 style={{ fontSize: 18, fontWeight: 700, color: "#0f172a", letterSpacing: "-0.02em" }}>
