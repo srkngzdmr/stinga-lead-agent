@@ -44,14 +44,14 @@ const StingaLogo = ({ size = 40 }) => {
       <circle cx="50" cy="50" r="6" fill="#10b981"/>
     </svg>
   ) : (
-    <img
-      src={STINGA_LOGO_URL}
-      alt="Stinga"
-      width={size}
-      height={size}
-      onError={() => setErr(true)}
-      style={{ borderRadius: "50%", objectFit: "contain", display: "block" }}
-    />
+    <div style={{ width: size, height: size, borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
+      <img
+        src={STINGA_LOGO_URL}
+        alt="Stinga"
+        onError={() => setErr(true)}
+        style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+      />
+    </div>
   );
 };
 
@@ -528,7 +528,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
 
           {/* SOL */}
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <StingaLogo size={36} />
+            <StingaLogo size={42} />
             <div className="blink" style={{ width: 8, height: 8, borderRadius: "50%", background: "#10b981", boxShadow: "0 0 6px 3px rgba(16,185,129,0.5)" }} />
             <span style={{ fontSize: 13, fontWeight: 700, color: "#10b981", letterSpacing: "0.12em", textTransform: "uppercase", fontFamily: "'JetBrains Mono',monospace", whiteSpace: "nowrap" }}>STINGA AJAN</span>
             <span style={{ background: "rgba(16,185,129,0.12)", border: "1px solid rgba(16,185,129,0.25)", borderRadius: 5, padding: "2px 7px", fontSize: 10, color: "#10b981", fontWeight: 700 }}>v4.2</span>
@@ -563,7 +563,7 @@ Sadece JSON döndür, başka açıklama yapma.`;
       {/* ── HEADER ── */}
       <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", padding: "9px 18px", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <StingaLogo size={44} />
+          <StingaLogo size={52} />
           <div>
             <h1 style={{ fontSize: 15, fontWeight: 700, color: "#0f172a" }}>Stinga Lead Agent</h1>
             <p style={{ fontSize: 10, color: "#64748b" }}>AI-Powered B2B Platform — Stinga Yapay Zeka</p>
